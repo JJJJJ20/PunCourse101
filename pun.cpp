@@ -12,6 +12,7 @@ int main(int argc, char *argv[]){
     a.y = 2005;
     //A = new Course(123, "MathTCAS", 234.5 , a); //อันนี้ใช้ได้แค่กับ pointer
     Course A(123, "MathTCAS", 234.5, a);
+    A.input_course();
     A.print_course();
     
 }

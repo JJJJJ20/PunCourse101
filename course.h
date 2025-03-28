@@ -17,6 +17,7 @@ public:
     Course(int id, string n, float hrs, EXP ex);
     ~Course();
     void print_course();
+    void input_course();
 };
 typedef Course* CoursePtr;
 

@@ -22,12 +22,25 @@ Course::~Course(){
 
 
 //rub input from user, return pen course
-//Course input_course(){ //อันนี้ if ไม่ให้input_course เป็นmemberของclass
+//Course input_course(){ //อันนี้ if ไม่ให้input_course เป็นmemberของclass มนจต่างกันไงกับทำในmain
+
+void Course::input_course(){
+    cout << "Enter course ID: ";
+    cin >> course_id;
+    cin.ignore();  // Ignore newline character left in buffer
+
+    cout << "Enter course name: ";
+    getline(cin, name);  // Get full name (including spaces)
+
+    cout << "Enter course hours: ";
+    cin >> hours;
+
+    cout << "Enter expiration date (D M Y): ";
+    cin >> exp.d >> exp.m >> exp.y;
+
+}
 
 
-
-
-//}
 
 
 void Course::print_course(){
