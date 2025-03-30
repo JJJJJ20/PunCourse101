@@ -12,7 +12,7 @@ private:
     string name;
     float hours;
     EXP exp;
-    Course *next;
+    //Course *next;
 public:
     Course(int id, string n, float hrs, EXP ex);
     ~Course();
@@ -23,4 +23,16 @@ typedef Course* CoursePtr;
 
 
 
-
+//cop jak chatGPT
+class Progress {
+    public:
+        Course* course;
+        int completed_hours;
+        float score;
+    
+        Progress(Course* c, int hours, float s) {
+            course = c;
+            completed_hours = hours;
+            score = s;
+        }
+    };

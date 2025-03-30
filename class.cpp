@@ -2,7 +2,7 @@
 #include <iomanip>
 #include <string>
 using namespace std;
-#include "course.h"
+#include "class.h"
 
 //add course constructor
 Course::Course(int id, string n, float hrs, EXP ex){
@@ -10,8 +10,8 @@ Course::Course(int id, string n, float hrs, EXP ex){
     name = n;
     hours = hrs;
     exp = ex; 
-    next = NULL;
-    cout<< "Adding course : " << name << endl;
+    //next = NULL;
+    cout<< "Adding course " << name << endl;
 }
 
 //delete course //o~ <--me 4 hours old 
@@ -39,8 +39,6 @@ void Course::input_course(){
     cin >> exp.d >> exp.m >> exp.y;
 
 }
-
-
 
 
 void Course::print_course(){

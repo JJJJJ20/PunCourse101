@@ -1,5 +1,5 @@
 compile: pun.cpp
-	 g++  pun.cpp -o pun
+	 g++  class.cpp pun.cpp -o pun
 
 
 run: pun
