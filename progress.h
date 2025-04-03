@@ -11,6 +11,7 @@ private:
     float score;
 public:
     Progress(Course* c = nullptr, float comp = 0.0f, float s = 0.0f);
+    ~Progress();
     float get_progress_percent();
     void print();
 };
@@ -27,7 +28,7 @@ Progress::~Progress(){
 }
 
 float Progress::get_progress_percent() {
-    return (completed_hours / course->total_hours) * 100.0f;
+    return (completed_hours / course->hours) * 100.0f;
 }
 
 void Progress::print() {
