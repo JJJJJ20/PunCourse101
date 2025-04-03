@@ -2,7 +2,28 @@
 #include <iomanip>
 #include <string>
 using namespace std;
-#include "class.h"
+
+
+struct expiration_date{
+    int d=0, m=0, y=0;
+};
+typedef struct expiration_date EXP;
+
+
+class Course{
+private:
+    int course_id;
+    string name;
+    float hours;
+    EXP exp;
+public:
+    Course(int id=0, string n="", float hrs=0, EXP ex = EXP());
+    ~Course();
+    void print_course();
+    void input_course();
+};
+typedef Course* CoursePtr;
+
 
 //add course constructor
 Course::Course(int id, string n, float hrs, EXP ex){
@@ -11,7 +32,7 @@ Course::Course(int id, string n, float hrs, EXP ex){
     hours = hrs;
     exp = ex; 
     //next = NULL;
-    cout<< "Adding course " << name << endl;
+    //cout<< "Adding course " << name << endl;
 }
 
 //delete course //o~ <--me 4 hours old 
