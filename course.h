@@ -2,7 +2,8 @@
 #include <iomanip>
 #include <string>
 using namespace std;
-
+#ifndef COURSE_H
+#define COURSE_H
 
 struct expiration_date{
     int d=0, m=0, y=0;
@@ -13,9 +14,10 @@ typedef struct expiration_date EXP;
 class Course{
 private:
     int course_id;
-    string name;
-    float hours;
     EXP exp;
+protected:
+    float hours;
+    string name;
 public:
     Course(int id=0, string n="", float hrs=0, EXP ex = EXP());
     ~Course();
@@ -72,3 +74,7 @@ void Course::print_course(){
                                 << setfill('0')<<setw(2) << exp.m << "/"
                                 << setfill('0')<<setw(2) << exp.y << endl;
 }
+
+
+
+#endif

@@ -50,6 +50,7 @@ int main(int argc, char *argv[]){
 
 void menu(){
     Course A;
+    Progress P;
     int choice;
     while(1){
     cout<<"Choose a number"<<endl
@@ -62,12 +63,13 @@ void menu(){
     
         if (choice == 1) {
             A.print_course();
+            cout<<"-----------"<<endl;
         } else if (choice == 2) {
-           // registerUser(currentUser);
+           P.print();
 
         } else if(choice==3){
             A.input_course();
-
+            cout<<"\n-----------";
         }else if (choice == 4) {
             cout << "Goodbye!\n";
             break;

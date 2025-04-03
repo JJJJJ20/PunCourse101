@@ -1,14 +1,17 @@
 #include  <iostream>
 #include <iomanip>
 #include <string>
+#include "course.h"
 using namespace std;
 
 //cop jak chatGPT
-class Progress {
+class Progress:public Course{
 private:
-    Course* course;
+    
     float completed_hours;
     float score;
+protected:
+    Course* course;
 public:
     Progress(Course* c = nullptr, float comp = 0.0f, float s = 0.0f);
     ~Progress();
@@ -17,23 +20,23 @@ public:
 };
 
 //add course constructor
-Progress::Progress(Course* c , float comp, float s){
-    
-    cout<< "Adding Progress " << name << endl;
+Progress::Progress(Course* c , float comp, float s): course(c), completed_hours(comp), score(s) {
+    if (course)
+    cout<< "Adding Progress " << Course::name << endl;
 }
 
 //delete course //o~ <--me 4 hours old 
 Progress::~Progress(){
-    cout <<"Deleting Progress : " << name << endl;
+    cout <<"Deleting Progress : " << Course::name << endl;
 }
 
 float Progress::get_progress_percent() {
-    return (completed_hours / course->hours) * 100.0f;
+    return (completed_hours / Course::hours) * 100.0f;
 }
 
 void Progress::print() {
-    cout << "Course: " << course->name
-         << ", Completed: " << completed_hours << "/" << course->total_hours
+    cout << "Course: " << Course::name
+         << ", Completed: " << completed_hours << "/" << Course::hours
          << ", Progress: " << get_progress_percent() << "%"
          << ", Score: " << score << endl;
 }
