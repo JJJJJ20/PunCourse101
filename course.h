@@ -6,7 +6,6 @@
 using namespace std;
 #ifndef COURSE_H
 #define COURSE_H
-#
 
 
 struct expiration_date{

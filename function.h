@@ -43,7 +43,7 @@ bool login() {
         } else if (choice == 2) {
             registerUser(currentUser);
         } else if (choice == 3) {
-            cout << "Bye Bye jubjub!\n";
+            cout << "ByeBye jubjub!\n";
             return false;
         } else {
             cout << "Invalid choice. Try again.\n";
@@ -55,7 +55,7 @@ bool login() {
 void menu(const User& currentUser){
     Course A;
     Progress P;
-    int choice;
+    int choice,selected_id;
     while(1){
     cout<<"Choose a number"<<endl
         <<"1. View course"<<endl
@@ -70,14 +70,16 @@ void menu(const User& currentUser){
             A.load_from_file(currentUser.phone + ".txt"); 
             cout<<"-----------"<<endl;
         } else if (choice == 2) {
-           P.print();
+            selected_id = P.choose_course(currentUser.phone + ".txt");
+            P.update_progress(currentUser.phone + ".txt", selected_id);
+            //P.print();
 
         } else if(choice==3){
             A.input_course();
             A.save_to_file(currentUser.phone + ".txt"); 
             cout<<"\n-----------";
         }else if (choice == 4) {
-            cout << "Bye Bye jubjub!\n";
+            cout << "ByeBye jubjub!\n";
             break;
         } else {
             cout << "Invalid choice. Try again.\n";
