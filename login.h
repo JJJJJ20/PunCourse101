@@ -220,11 +220,11 @@ void registerUser(User& currentUser) {
 }
 
 
-void loginUser(User& currentUser) {
+bool loginUser(User& currentUser) {
     ifstream file("user.txt");
     if (!file) {
         cout << "Cannot open the file.\n";
-        return;
+        return false;
     }
 
     vector<User> users;
@@ -249,22 +249,19 @@ void loginUser(User& currentUser) {
     cout << "Enter your password: ";
     getMaskedPassword(password, 20);
 
-    bool found = false;
     for (const auto& user : users) {
         if (user.phone == phone && user.password == password) {
-            found = true;
             currentUser = user;
 
             cout << "\nLogin Successful! Welcome " << user.nameandsur << endl;
             saveLogin(currentUser);
-            break;
+            return true;
         }
     }
-
-    if (!found) {
         cout << "Phone number or password incorrect.\n";
-    }
+        return false;
 }
+
 
 
 #endif
