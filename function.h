@@ -4,7 +4,7 @@ using namespace std;
 #include "course.h"
 #include "login.h"
 bool login();
-void menu();
+void menu(const User& currentUser);
 
 
 bool login() {
@@ -37,13 +37,13 @@ bool login() {
             } while (!success);
 
             if (success) {
-                menu(); 
+                menu(currentUser); 
                 return true;
             }
         } else if (choice == 2) {
             registerUser(currentUser);
         } else if (choice == 3) {
-            cout << "Goodbye!\n";
+            cout << "Bye Bye jubjub!\n";
             return false;
         } else {
             cout << "Invalid choice. Try again.\n";
@@ -52,7 +52,7 @@ bool login() {
 }
 
 
-void menu(){
+void menu(const User& currentUser){
     Course A;
     Progress P;
     int choice;
@@ -66,17 +66,18 @@ void menu(){
     cin>>choice;
     
         if (choice == 1) {
-            A.print_course();
+            //A.print_course();
+            A.load_from_file(currentUser.phone + ".txt"); 
             cout<<"-----------"<<endl;
         } else if (choice == 2) {
            P.print();
 
         } else if(choice==3){
             A.input_course();
-            A.save_to_file(); 
+            A.save_to_file(currentUser.phone + ".txt"); 
             cout<<"\n-----------";
         }else if (choice == 4) {
-            cout << "Goodbye!\n";
+            cout << "Bye Bye jubjub!\n";
             break;
         } else {
             cout << "Invalid choice. Try again.\n";

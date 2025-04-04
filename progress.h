@@ -7,7 +7,6 @@ using namespace std;
 //cop jak chatGPT
 class Progress:public Course{
 private:
-    
     float completed_hours;
     float score;
 protected:
@@ -27,7 +26,7 @@ Progress::Progress(Course* c , float comp, float s): course(c), completed_hours(
 
 //delete course //o~ <--me 4 hours old 
 Progress::~Progress(){
-    cout <<"Deleting Progress : " << Course::name << endl;
+    //cout <<"Deleting Progress : " << Course::name << endl;
 }
 
 float Progress::get_progress_percent() {

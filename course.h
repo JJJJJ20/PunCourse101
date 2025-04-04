@@ -6,7 +6,7 @@
 using namespace std;
 #ifndef COURSE_H
 #define COURSE_H
-
+#
 
 
 struct expiration_date{
@@ -25,7 +25,7 @@ protected:
 public:
     Course(int id=0, string n="", float hrs=0, EXP ex = EXP());
     ~Course();
-    void print_course();
+    //void print_course();
     void input_course();
     void save_to_file(const string& filename = "course.txt") const;
     static void load_from_file(const string& filename = "course.txt");
@@ -45,7 +45,7 @@ Course::Course(int id, string n, float hrs, EXP ex){
 
 //delete course //o~ <--me 4 hours old 
 Course::~Course(){
-    cout <<"Deleting course : " << name << endl;
+    //cout <<"Deleting course : " << name << endl;
 }
 
 
@@ -69,7 +69,7 @@ void Course::input_course(){
 
 }
 
-
+/*
 void Course::print_course(){
     cout<<"Course A -------------------"<<endl
         <<"ID    : " << course_id << endl
@@ -80,6 +80,7 @@ void Course::print_course(){
                                 << setfill('0')<<setw(2) << exp.m << "/"
                                 << setfill('0')<<setw(2) << exp.y << endl;
 }
+*/
 
 void Course::save_to_file(const string& filename) const {
     ofstream fout(filename, ios::app);
@@ -97,6 +98,37 @@ void Course::save_to_file(const string& filename) const {
     cout << "successfully saved in " << filename << endl;
 }
 
+void Course::load_from_file(const string& filename) {
+    ifstream fin(filename);
+    if (!fin) {
+        cout << "File not found: " << filename << endl;
+        return;
+    }
 
+    string line;
+    cout << "\n Courses from " << filename << ":\n";
+    while (getline(fin, line)) {
+        stringstream ss(line);
+        string token, name;
+        int id, d, m, y;
+        float hrs;
+
+        getline(ss, token, ','); id = stoi(token);
+        getline(ss, name, ',');
+        getline(ss, token, ','); hrs = stof(token);
+        getline(ss, token, ','); d = stoi(token);
+        getline(ss, token, ','); m = stoi(token);
+        getline(ss, token, ','); y = stoi(token);
+
+        cout << "----------------------------\n";
+        cout << "ID    : " << id << endl;
+        cout << "Name  : " << name << endl;
+        cout << "Hours : " << hrs << endl;
+        cout << "Expiration Date : " << setfill('0') << setw(2) << d << "/"
+             << setw(2) << m << "/" << y << endl;
+    }
+
+    fin.close();
+}
 
 #endif

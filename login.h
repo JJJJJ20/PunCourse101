@@ -83,7 +83,7 @@ void clearScreen() {
 
 
 void waitForEnter() {
-    cout << "Press Enter for next function: ";
+    cout << "Press Enter for next function ";
     while (true) {
         char input = getchar();
         if (input == '\n') {
@@ -214,6 +214,8 @@ void registerUser(User& currentUser) {
     } while (confirmPass != newUser.password);
 
     file << newUser.nameandsur << "|" << newUser.phone << "|" << newUser.password << endl;
+    ofstream courseFile(newUser.phone + ".txt");
+    courseFile.close();
 
     cout << "\nRegistration successful! Your username (phone) is " << newUser.phone << endl;
     waitForEnter();
