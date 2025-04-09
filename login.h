@@ -98,7 +98,7 @@ void waitForEnter() {
 
 
 void saveLogin(const User& currentUser) {
-    ofstream file("logindata.txt");
+    ofstream file("user.txt");
     if (!file) {
         cout << "Error saving login session.\n";
         return;

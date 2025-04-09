@@ -1,3 +1,6 @@
+#ifndef COURSELL_H
+#define COURSELL_H
+
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -6,6 +9,8 @@
 using namespace std;
 
 #include "course.h"
+
+
 
 // ✅ CourseNode for Linked List
 struct CourseNode {
@@ -53,8 +58,9 @@ CourseNode* load_courses_into_list(const string& filename) {
     return head;
 }
 
-// ✅ Choose course from list
-Course* choose_course_from_list(CourseNode* head) {
+
+/*
+Course* choose_course(CourseNode* head) {
     if (!head) {
         cout << "No courses available." << endl;
         return nullptr;
@@ -81,6 +87,7 @@ Course* choose_course_from_list(CourseNode* head) {
     cout << "Course ID not found." << endl;
     return nullptr;
 }
+    */
 
 // ✅ Cleanup
 void delete_course_list(CourseNode* head) {
@@ -91,3 +98,6 @@ void delete_course_list(CourseNode* head) {
         delete temp;
     }
 }
+
+
+#endif

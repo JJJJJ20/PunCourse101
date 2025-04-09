@@ -3,6 +3,7 @@ using namespace std;
 
 #include "course.h"
 #include "login.h"
+#include "courseLL.h"
 bool login();
 void menu(const User& currentUser);
 
@@ -55,7 +56,13 @@ bool login() {
 void menu(const User& currentUser){
     Course A;
     Progress P;
+    string filename = currentUser.phone;
     int choice,selected_id;
+
+    CourseNode* head;
+    head = load_courses_into_list(filename);
+
+
     while(1){
     cout<<"Choose a number"<<endl
         <<"1. View course"<<endl
@@ -70,10 +77,10 @@ void menu(const User& currentUser){
             A.load_from_file(currentUser.phone + ".txt"); 
             cout<<"-----------"<<endl;
         } else if (choice == 2) {
-            selected_id = P.choose_course(currentUser.phone + ".txt");
-            P.update_progress(currentUser.phone + ".txt", selected_id);
-            //P.print();
-
+            //selected_id = P.choose_course(currentUser.phone + ".txt");
+            //P.update_progress(currentUser.phone + ".txt", selected_id);
+             choose_course(head);
+        
         } else if(choice==3){
             A.input_course();
             A.save_to_file(currentUser.phone + ".txt"); 

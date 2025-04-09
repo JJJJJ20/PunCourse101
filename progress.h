@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <string>
 #include "course.h"
+#include "courseLL.h"
 using namespace std;
 
 //cop jak chatGPT
@@ -13,7 +14,7 @@ protected:
 public:
     Progress(Course* c = nullptr, float comp = 0.0f);
     ~Progress() {};
-    int choose_course(const string& filename);
+    //int choose_course(const string& filename);
     void update_progress(const string& filename, int ID);
     void print();
 };
@@ -32,7 +33,7 @@ void Progress::print() {
 }
 
 
-
+/*
 int Progress::choose_course(const string& filename){
     ifstream fin(filename);
     if (!fin) {
@@ -67,6 +68,8 @@ int Progress::choose_course(const string& filename){
     return inputID;
 
 }
+*/
+
 
 void Progress::update_progress(const string& filename, int ID){
     ifstream fin(filename);
