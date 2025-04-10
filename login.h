@@ -13,6 +13,15 @@
 #else
 #include <termios.h>
 #include <unistd.h>
+struct User {
+    string nameandsur;
+    string phone;
+    string password;
+};
+bool isPhoneValid(const string& phone);
+void getMaskedPassword(string& password, size_t maxLen);
+bool loginUser(User&);
+
 int getch() {
     struct termios oldt{}, newt{};
     int ch;
@@ -29,21 +38,22 @@ int getch() {
 using namespace std;
 
 
-struct User {
-    string nameandsur;
-    string phone;
-    string password;
-};
 
 
 bool isPhoneValid(const string& phone) {
+    // ต้องมีความยาว 10 หลัก
     if (phone.length() != 10) return false;
+
+    // ต้องเป็นตัวเลขล้วน
     for (char c : phone) {
         if (!isdigit(c)) return false;
     }
+
+    // ต้องขึ้นต้นด้วย '0'
+    if (phone[0] != '0') return false;
+
     return true;
 }
-
 
 void getMaskedPassword(string& password, size_t maxLen) {
     char ch;
@@ -98,12 +108,12 @@ void waitForEnter() {
 
 
 void saveLogin(const User& currentUser) {
-    ofstream file("user.txt");
+    ofstream file("logindata.txt"); // ไม่ใช่ user.txt!
     if (!file) {
         cout << "Error saving login session.\n";
         return;
     }
-    file << currentUser.nameandsur << " " << currentUser.phone;
+    file << currentUser.nameandsur << "|" << currentUser.phone << "|" << currentUser.password<<endl;
 }
 
 
@@ -127,11 +137,21 @@ void logoutUser(User& currentUser) {
 void saveUsers(const vector<User>& users) {
     ofstream file("user.txt");
     for (const auto& user : users) {
-        file << user.nameandsur << " " << user.phone << " " << user.password << endl;
+        file << user.nameandsur << "|" << user.phone << "|" << user.password << endl;
     }
     cout << "Data saved successfully!\n";
 }
 
+bool isNameValid(const string& name) {
+    if (name.empty()) return false;
+
+    for (char c : name) {
+        if (!(isalpha(c) || c == ' ' || (unsigned char)c >= 0xA0)) {
+            return false;
+        }
+    }
+    return true;
+}
 
 void registerUser(User& currentUser) {
     ofstream file("user.txt", ios::app);
@@ -141,8 +161,15 @@ void registerUser(User& currentUser) {
     }
 
     User newUser;
-    cout << "Enter your Name-Surname: ";
-    getline(cin, newUser.nameandsur);
+   // cout << "Enter your Name-Surname: ";
+    do {
+        cout << "Enter your Name-Surname: ";
+        getline(cin, newUser.nameandsur);
+    
+        if (!isNameValid(newUser.nameandsur)) {
+            cout << "Invalid input. Please use letters only (no numbers or symbols).\n";
+        }
+    } while (!isNameValid(newUser.nameandsur));
 
     int back;
     bool isDuplicate;
