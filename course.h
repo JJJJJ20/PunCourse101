@@ -4,8 +4,6 @@
 #include <fstream>
 
 
-
-
 using namespace std;
 
 #ifndef COURSE_H
@@ -36,6 +34,9 @@ public:
     static void load_from_file(const string& filename = "course.txt");
     int getID() const { return course_id; }
     string getName() const { return name; }
+    float getHours() const { return hours; }
+    static void delete_course_by_id(const string& filename, int targetID);
+
 };
 typedef Course* CoursePtr;
 

@@ -47,35 +47,99 @@ void Course::save_to_file(const string& filename) const {
         cout << "Cannot open file.\n";
         return;
     }
-    fout << course_id << "," << name << "," << hours << ","
+    fout << course_id << "," << name << "," << hours << "," << hours << ","  // total, remaining
          << exp.d << "," << exp.m << "," << exp.y << endl;
     fout.close();
 }
 
 
+
 void Course::display(const string& filename) {
-    CourseNode* head = load_courses_into_list(filename);
-    if (!head) {
-        cout << "\nCourse Empty! Please add course first\n\n";
+    ifstream fin(filename);
+    if (!fin) {
+        cout << "\n❌ Course file not found.\n";
         return;
     }
 
-    CourseNode* current = head;
-    int d,m,y;
-    while (current) {
-        EXP exp;
-        d = current->course->exp.d;
-        m = current->course->exp.m;
-        y = current->course->exp.y;
+    string line;
+    bool hasCourse = false;
+
+    while (getline(fin, line)) {
+        hasCourse = true;  // ถ้ามีบรรทัดอย่างน้อย 1 บรรทัด
+
+        stringstream ss(line);
+        int id, d, m, y;
+        float total, remaining;
+        string name, token;
+
+        getline(ss, token, ','); id = stoi(token);
+        getline(ss, name, ',');
+        getline(ss, token, ','); total = stof(token);
+        getline(ss, token, ','); remaining = stof(token);
+        getline(ss, token, ','); d = stoi(token);
+        getline(ss, token, ','); m = stoi(token);
+        getline(ss, token, ','); y = stoi(token);
+
+        float completed = total - remaining;
+
         cout << "----------------------------" << endl
-             << "ID    : " << current->course->course_id << endl
-             << "Name  : " << current->course->name << endl
-             << "Hours : " << current->course->hours << endl
-             << "Expiration Date : " << setfill('0') << setw(2) << d << "/"
-             << setw(2) << m << "/" << y << endl;
-        current = current->next;
+             << "ID            : " << id << endl
+             << "Name          : " << name << endl
+             << "Total Hours   : " << total << endl
+             << "Completed     : " << completed << endl
+             << "Remaining     : " << remaining << endl
+             << "Expiration    : " << setfill('0') << setw(2) << d << "/"
+                                << setw(2) << m << "/" << y << endl;
     }
 
-    delete_course_list(head);
+    fin.close();
+
+    if (!hasCourse) {
+        cout << "\n Course Empty!\n ";
+    }
+}
+
+
+void Course::delete_course_by_id(const string& filename, int targetID) {
+    ifstream fin(filename);
+    if (!fin) {
+        cout << "Cannot open file.\n";
+        return;
+    }
+
+    ofstream fout("temp.txt");
+    if (!fout) {
+        cout << "Cannot create temp file.\n";
+        fin.close();
+        return;
+    }
+
+    string line;
+    bool found = false;
+
+    while (getline(fin, line)) {
+        stringstream ss(line);
+        int id;
+        string token;
+        getline(ss, token, ','); id = stoi(token);
+
+        if (id == targetID) {
+            found = true; 
+            continue;
+        }
+
+        fout << line << endl;
+    }
+
+    fin.close();
+    fout.close();
+
+    remove(filename.c_str());
+    rename("temp.txt", filename.c_str());
+
+    if (found)
+        cout << "Course ID " << targetID << " deleted successfully.\n";
+    else
+        cout << "Course ID not found.\n";
 }
 

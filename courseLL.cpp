@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-// ✅ Only define these ONCE in this file
+
 CourseNode* load_courses_into_list(const string& filename) {
     ifstream fin(filename);
     if (!fin) {

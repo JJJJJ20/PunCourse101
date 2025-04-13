@@ -1,6 +1,5 @@
 compile: pun.cpp
-	 g++  pun.cpp course.cpp courseLL.cpp function.cpp -o pun
-
+	 g++ pun.cpp course.cpp courseLL.cpp function.cpp login.cpp progress.cpp -o pun
 
 run: pun
 	 ./pun
