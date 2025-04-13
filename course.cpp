@@ -6,20 +6,40 @@
 #include "courseLL.h"  
 
 
-Course::Course(int id, string n, float hrs, EXP ex){
+Course::Course(int id, string n, float hrs,float rem, EXP ex){
     course_id = id;
     name = n;
     hours = hrs;
+    remaining = rem;
     exp = ex; 
 }
 
-void Course::input_course(){
-    cout << "Enter course ID: ";
-    while (!(cin >> course_id)) {
-        cin.clear(); // clear error flags
-        cin.ignore(10000, '\n'); // discard invalid input
-        cout << "Invalid input. Please enter a number for course ID: ";
-    }
+void Course::add_course(CourseNode* head){
+    int inputID;
+    bool existedID = false;
+
+    do{
+        existedID = false;
+        cout << "Enter course ID: ";
+        while (!(cin >> course_id)) {
+            cin.clear(); // clear error flags
+            cin.ignore(10000, '\n'); // discard invalid input
+            cout << "Invalid input. Please enter a number for course ID: ";
+        }
+
+        CourseNode* current=head;
+        while (current) {
+            if(current->course->getID() == course_id) {
+                cout << "This ID already exists. Please enter a different ID.\n";
+                existedID = true;
+                break;
+            }
+            current = current -> next;
+        }
+
+    } while(existedID);
+
+
     cin.ignore();  
 
     cout << "Enter course name: ";
@@ -47,38 +67,30 @@ void Course::save_to_file(const string& filename) const {
         cout << "Cannot open file.\n";
         return;
     }
-    fout << course_id << "," << name << "," << hours << "," << hours << ","  // total, remaining
+    fout << course_id << "," << name << "," << hours << "," << hours << ","
          << exp.d << "," << exp.m << "," << exp.y << endl;
     fout.close();
 }
 
 
 
-void Course::display(const string& filename) {
-    ifstream fin(filename);
-    if (!fin) {
-        cout << "\n❌ Course file not found.\n";
+void Course::display(CourseNode* head) {
+    if (!head) {
+        cout << "\n Course file not found\n";
         return;
     }
 
-    string line;
+    CourseNode* current = head;
     bool hasCourse = false;
 
-    while (getline(fin, line)) {
-        hasCourse = true;  // ถ้ามีบรรทัดอย่างน้อย 1 บรรทัด
+    while (current) {
+        hasCourse = true;
 
-        stringstream ss(line);
-        int id, d, m, y;
-        float total, remaining;
-        string name, token;
-
-        getline(ss, token, ','); id = stoi(token);
-        getline(ss, name, ',');
-        getline(ss, token, ','); total = stof(token);
-        getline(ss, token, ','); remaining = stof(token);
-        getline(ss, token, ','); d = stoi(token);
-        getline(ss, token, ','); m = stoi(token);
-        getline(ss, token, ','); y = stoi(token);
+        int id = current->course->getID();
+        string name = current->course->getName();
+        float remaining = current->course->getRemaining();   
+        float total = current->course->getHours(); 
+        EXP exp = current->course->exp;
 
         float completed = total - remaining;
 
@@ -87,15 +99,15 @@ void Course::display(const string& filename) {
              << "Name          : " << name << endl
              << "Total Hours   : " << total << endl
              << "Completed     : " << completed << endl
-             << "Remaining     : " << remaining << endl
-             << "Expiration    : " << setfill('0') << setw(2) << d << "/"
-                                << setw(2) << m << "/" << y << endl;
+             << "Hours Left    : " << remaining << endl
+             << "Expiration    : " << setfill('0') << setw(2) << exp.d << "/"
+                                << setw(2) << exp.m << "/" << exp.y << endl;
+
+        current = current->next;
     }
 
-    fin.close();
-
     if (!hasCourse) {
-        cout << "\n Course Empty!\n ";
+        cout << "\n Course Empty! \n";
     }
 }
 
@@ -115,7 +127,7 @@ void Course::delete_course(const string& filename, int targetID) {
     }
 
     string line;
-    bool found = false;
+    //bool found = false;
 
     while (getline(fin, line)) {
         stringstream ss(line);
@@ -123,12 +135,9 @@ void Course::delete_course(const string& filename, int targetID) {
         string token;
         getline(ss, token, ','); id = stoi(token);
 
-        if (id == targetID) {
-            found = true; 
-            continue;
+        if (id != targetID) {
+            fout << line << endl;
         }
-
-        fout << line << endl;
     }
 
     fin.close();
@@ -137,9 +146,7 @@ void Course::delete_course(const string& filename, int targetID) {
     remove(filename.c_str());
     rename("temp.txt", filename.c_str());
 
-    if (found)
-        cout << "Course ID " << targetID << " deleted successfully.\n";
-    else
-        cout << "Course ID not found.\n";
+    cout << "Course ID " << targetID << " deleted successfully.\n\n";
+
 }
 

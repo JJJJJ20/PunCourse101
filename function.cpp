@@ -16,12 +16,12 @@ bool login() {
              << "3. Exit\n"
              << "Enter choice: ";
         cin >> choice;
-        cin.ignore(); // clear newline
+        cin.ignore(); 
 
         if (choice == 1) {
             bool success = false;
             do {
-                success = loginUser(currentUser);  // เปลี่ยน loginUser ให้ return bool ด้วย
+                success = loginUser(currentUser);  
                 if (!success) {
                     string retry;
                     cout << "Do you want to try again? (y/n): ";
@@ -48,10 +48,6 @@ bool login() {
 }
 
 int choose_course(CourseNode* head) {
-    if (!head) {
-        cout << "\nNo courses available.\n";
-        return -1;
-    }
 
     cout << "\n All Courses:\n";
 
@@ -74,10 +70,7 @@ void menu(const User& currentUser){
     Progress P;
     string filename = currentUser.phone;
     int choice,inputID_progress,inputID_delete;
-
     CourseNode* head;
-    head = load_courses_into_list(filename);
-
 
     while(1){
     cout<<"Choose a number"<<endl
@@ -90,41 +83,38 @@ void menu(const User& currentUser){
     cin>>choice;
     
         if (choice == 1) {
-            //A.print_course();
-            A.display(currentUser.phone + ".txt"); 
-            cout<<"-----------"<<endl;
-        } else if (choice == 2) {
-            // โหลดใหม่ทุกครั้งก่อนอัปเดต
-            delete_course_list(head); // ล้างอันเก่า (ถ้ามี)
+            delete_course_list(head);
             head = load_courses_into_list(filename + ".txt");
-        
+            A.display(head);
+            cout << "----------------------------" << endl;
+        } else if (choice == 2) {
+            delete_course_list(head); 
+            head = load_courses_into_list(filename + ".txt");
             if (!head) {
-                cout << "No courses found.\n";
+                cout << "\nNo courses found\n\n";
                 continue;
             }
-        
             inputID_progress = choose_course(head);
             P.update_progress(filename + ".txt", inputID_progress);
         
         } else if(choice==3){
-            A.input_course();
+            A.add_course(head);
             A.save_to_file(currentUser.phone + ".txt"); 
-            cout<<"\n-----------";
+            cout << "\n----------------------------" << endl;
         }else if (choice == 4) {
-            /*int delID;
-            cout << "Enter course ID to delete: ";
-            cin >> delID;
-            P.delete_course(currentUser.phone + ".txt", delID); */
-
+            if (!head) {
+                cout << "\nNo courses found\n\n";
+                continue;
+            }
             inputID_progress = choose_course(head);
             A.delete_course(currentUser.phone + ".txt", inputID_progress);
+
         }else if (choice == 5) {
                 cout << "ByeBye jubjub!\n";
             break;
         } else {
             cout << "Invalid choice. Try again.\n";
         }
-
     }
 
 

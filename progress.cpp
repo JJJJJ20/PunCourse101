@@ -19,28 +19,6 @@ void Progress::print() {
      << endl;
 }
 
-/*
-int Progress::choose_course(CourseNode* head) {
-    if (!head) {
-        cout << "\nNo courses available.\n";
-        return -1;
-    }
-
-    cout << "\n All Courses:\n";
-
-    CourseNode* current = head;
-    while (current) {
-        cout << current->course-> getID() << "  " << current->course->getName() << endl;
-        current = current->next;
-    }
-
-    int inputID;
-    cout << "\nEnter the course ID: ";
-    cin >> inputID;
-
-    return inputID;
-}
-*/
 
 void Progress::update_progress(const string& filename, int ID) {
     ifstream fin(filename);

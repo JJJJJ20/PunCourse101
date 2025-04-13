@@ -21,20 +21,22 @@ class Course{
     friend struct CourseNode;
 private:
 protected:
-    float hours;
+    float hours,remaining;
     string name;
     int course_id;
     EXP exp;
 public:
-    Course(int id=0, string n="", float hrs=0, EXP ex = EXP());
+    Course(int id=0, string n="", float hrs=0, float remaining=0 ,EXP ex = EXP());
     ~Course() {};
-    static void display(const string& filename);
-    void input_course();
+
+    void display(CourseNode* head);
+    void add_course(CourseNode* head);
     void save_to_file(const string& filename = "course.txt") const;
     static void load_from_file(const string& filename = "course.txt");
     int getID() const { return course_id; }
     string getName() const { return name; }
     float getHours() const { return hours; }
+    float getRemaining() const { return remaining; }
     static void delete_course(const string& filename, int targetID);
 
 };

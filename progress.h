@@ -16,8 +16,7 @@ protected:
 public:
     Progress(Course* c = nullptr, float comp = 0.0f);
     ~Progress() {};
-
-    //int choose_course(CourseNode* head);                        
+                     
     void update_progress(const string& filename, int ID);    
     void print(); 
     void decrease_course_hours(const string& filename, int id, float decrease);                                        
