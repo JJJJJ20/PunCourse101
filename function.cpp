@@ -117,7 +117,7 @@ void menu(const User& currentUser){
             P.delete_course(currentUser.phone + ".txt", delID); */
 
             inputID_progress = choose_course(head);
-            P.delete_course(currentUser.phone + ".txt", inputID_progress);
+            A.delete_course(currentUser.phone + ".txt", inputID_progress);
         }else if (choice == 5) {
                 cout << "ByeBye jubjub!\n";
             break;

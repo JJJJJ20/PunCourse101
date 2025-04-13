@@ -100,7 +100,7 @@ void Course::display(const string& filename) {
 }
 
 
-void Course::delete_course_by_id(const string& filename, int targetID) {
+void Course::delete_course(const string& filename, int targetID) {
     ifstream fin(filename);
     if (!fin) {
         cout << "Cannot open file.\n";

@@ -35,7 +35,7 @@ public:
     int getID() const { return course_id; }
     string getName() const { return name; }
     float getHours() const { return hours; }
-    static void delete_course_by_id(const string& filename, int targetID);
+    static void delete_course(const string& filename, int targetID);
 
 };
 typedef Course* CoursePtr;
