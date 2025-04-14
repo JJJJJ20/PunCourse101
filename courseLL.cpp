@@ -53,3 +53,44 @@ void delete_course_list(CourseNode* head) {
         delete temp;
     }
 }
+
+CourseNode* sort_course_list_by_id(CourseNode* head) {
+    CourseNode* sorted = nullptr;
+
+    while (head) {
+        CourseNode* current = head;
+        head = head->next;
+        current->next = nullptr;
+
+        if (!sorted || current->course->getID() < sorted->course->getID()) {
+            current->next = sorted;
+            sorted = current;
+        } else {
+            CourseNode* temp = sorted;
+            while (temp->next && temp->next->course->getID() < current->course->getID()) {
+                temp = temp->next;
+            }
+            current->next = temp->next;
+            temp->next = current;
+        }
+    }
+
+    return sorted;
+}
+
+
+CourseNode* clone_course_list(CourseNode* head) {
+    CourseNode* newHead = nullptr, *tail = nullptr;
+    while (head) {
+        Course* copiedCourse = new Course(*head->course);  // ใช้ copy constructor
+        CourseNode* newNode = new CourseNode(copiedCourse);
+        if (!newHead) newHead = tail = newNode;
+        else {
+            tail->next = newNode;
+            tail = newNode;
+        }
+        head = head->next;
+    }
+    return newHead;
+}
+

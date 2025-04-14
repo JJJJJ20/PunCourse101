@@ -1,10 +1,13 @@
 #include<iostream>
+#include <algorithm>
 using namespace std;
 #include "function.h"
+#include "login.h"
 
 
 bool login() {
     User currentUser;
+    LoginSystem auth;  // ✅ เพิ่มบรรทัดนี้
 
     cout << "Welcome!\n";
     
@@ -21,7 +24,7 @@ bool login() {
         if (choice == 1) {
             bool success = false;
             do {
-                success = loginUser(currentUser);  
+                success = auth.loginUser(currentUser);  // ✅ เปลี่ยนตรงนี้
                 if (!success) {
                     string retry;
                     cout << "Do you want to try again? (y/n): ";
@@ -37,7 +40,7 @@ bool login() {
                 return true;
             }
         } else if (choice == 2) {
-            registerUser(currentUser);
+            auth.registerUser(currentUser);  // ✅ และตรงนี้
         } else if (choice == 3) {
             cout << "ByeBye jubjub!\n";
             return false;    
@@ -47,11 +50,15 @@ bool login() {
     } while (true);
 }
 
+
 int choose_course(CourseNode* head) {
+
+    CourseNode* cloned = clone_course_list(head);
+    CourseNode* sorted = sort_course_list_by_id(cloned);
 
     cout << "\n All Courses:\n";
 
-    CourseNode* current = head;
+    CourseNode* current = sorted;
     while (current) {
         cout << current->course-> getID() << "  " << current->course->getName() << endl;
         current = current->next;
@@ -78,7 +85,8 @@ void menu(const User& currentUser){
         <<"2. Update course progress"<<endl
         <<"3. Add course"<<endl
         <<"4. Delete course"<<endl
-        <<"5. Exit"<<endl
+        <<"5. Edit course"<<endl
+        <<"6. Exit"<<endl
         <<"Enter your number: ";
     cin>>choice;
     
@@ -110,9 +118,19 @@ void menu(const User& currentUser){
             A.delete_course(currentUser.phone + ".txt", inputID_progress);
 
         }else if (choice == 5) {
+            delete_course_list(head);
+            head = load_courses_into_list(filename + ".txt");
+            if (!head) {
+                cout << "\nNo courses found\n\n";
+                continue;
+            }
+            inputID_progress = choose_course(head);
+            A.edit_course(currentUser.phone + ".txt", inputID_progress);
+        }else if (choice == 6) {
                 cout << "ByeBye jubjub!\n";
             break;
-        } else {
+        }
+        else {
             cout << "Invalid choice. Try again.\n";
         }
     }

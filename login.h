@@ -1,4 +1,3 @@
-// login.h
 #ifndef LOGIN_H
 #define LOGIN_H
 
@@ -24,17 +23,22 @@ struct User {
     string password;
 };
 
-int getch();
-bool isPhoneValid(const string& phone);
-bool isNameValid(const string& name);
-void getMaskedPassword(string& password, size_t maxLen);
-void clearScreen();
-void waitForEnter();
-void saveLogin(const User& currentUser);
-bool loadLogin(User& currentUser);
-void logoutUser(User& currentUser);
-void saveUsers(const vector<User>& users);
-void registerUser(User& currentUser);
-bool loginUser(User& currentUser);
+class LoginSystem {
+public:
+    int getch();
+    bool isPhoneValid(const string& phone);
+    bool isNameValid(const string& name);
+    void getMaskedPassword(string& password, size_t maxLen);
+    void clearScreen();
+    void waitForEnter();
+
+    void saveLogin(const User& currentUser);
+    bool loadLogin(User& currentUser);
+    void logoutUser(User& currentUser);
+
+    void saveUsers(const vector<User>& users);
+    void registerUser(User& currentUser);
+    bool loginUser(User& currentUser);
+};
 
 #endif

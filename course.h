@@ -38,6 +38,7 @@ public:
     float getHours() const { return hours; }
     float getRemaining() const { return remaining; }
     static void delete_course(const string& filename, int targetID);
+    static void edit_course(const string& filename, int targetID);
 
 };
 typedef Course* CoursePtr;

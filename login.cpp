@@ -1,7 +1,8 @@
 #include "login.h"
+#include <algorithm>
 
 #ifndef _WIN32
-int getch() {
+int LoginSystem::getch() {
     struct termios oldt{}, newt{};
     int ch;
     tcgetattr(STDIN_FILENO, &oldt);
@@ -14,26 +15,17 @@ int getch() {
 }
 #endif
 
-bool isPhoneValid(const string& phone) {
-    if (phone.length() != 10) return false;
-    for (char c : phone) {
-        if (!isdigit(c)) return false;
-    }
-    if (phone[0] != '0') return false;
-    return true;
+bool LoginSystem::isPhoneValid(const string& phone) {
+    return phone.length() == 10 && phone[0] == '0' && all_of(phone.begin(), phone.end(), ::isdigit);
 }
 
-bool isNameValid(const string& name) {
-    if (name.empty()) return false;
-    for (char c : name) {
-        if (!(isalpha(c) || c == ' ' || (unsigned char)c >= 0xA0)) {
-            return false;
-        }
-    }
-    return true;
+bool LoginSystem::isNameValid(const string& name) {
+    return !name.empty() && all_of(name.begin(), name.end(), [](char c) {
+        return isalpha(c) || c == ' ' || (unsigned char)c >= 0xA0;
+    });
 }
 
-void getMaskedPassword(string& password, size_t maxLen) {
+void LoginSystem::getMaskedPassword(string& password, size_t maxLen) {
     char ch;
     password.clear();
     while (true) {
@@ -55,7 +47,7 @@ void getMaskedPassword(string& password, size_t maxLen) {
     }
 }
 
-void clearScreen() {
+void LoginSystem::clearScreen() {
 #ifdef _WIN32
     system("cls");
 #else
@@ -63,7 +55,7 @@ void clearScreen() {
 #endif
 }
 
-void waitForEnter() {
+void LoginSystem::waitForEnter() {
     cout << "Press Enter for next function ";
     while (true) {
         char input = getchar();
@@ -77,23 +69,20 @@ void waitForEnter() {
     }
 }
 
-void saveLogin(const User& currentUser) {
+void LoginSystem::saveLogin(const User& currentUser) {
     ofstream file("logindata.txt");
-    if (!file) {
-        cout << "Error saving login session.\n";
-        return;
-    }
-    file << currentUser.nameandsur << "|" << currentUser.phone << "|" << currentUser.password << endl;
+    if (file)
+        file << currentUser.nameandsur << "|" << currentUser.phone << "|" << currentUser.password << endl;
 }
 
-bool loadLogin(User& currentUser) {
+bool LoginSystem::loadLogin(User& currentUser) {
     ifstream file("logindata.txt");
     if (!file) return false;
     file >> currentUser.nameandsur >> currentUser.phone;
     return true;
 }
 
-void logoutUser(User& currentUser) {
+void LoginSystem::logoutUser(User& currentUser) {
     if (loadLogin(currentUser)) {
         remove("logindata.txt");
         cout << "You have been logged out.\n";
@@ -102,15 +91,14 @@ void logoutUser(User& currentUser) {
     }
 }
 
-void saveUsers(const vector<User>& users) {
+void LoginSystem::saveUsers(const vector<User>& users) {
     ofstream file("user.txt");
     for (const auto& user : users) {
         file << user.nameandsur << "|" << user.phone << "|" << user.password << endl;
     }
-    cout << "Data saved successfully!\n";
 }
 
-void registerUser(User& currentUser) {
+void LoginSystem::registerUser(User& currentUser) {
     ofstream file("user.txt", ios::app);
     if (!file) {
         cout << "Cannot open file.\n";
@@ -121,28 +109,22 @@ void registerUser(User& currentUser) {
     do {
         cout << "Enter your Name-Surname: ";
         getline(cin, newUser.nameandsur);
-        if (!isNameValid(newUser.nameandsur)) {
-            cout << "Invalid input. Please use letters only (no numbers or symbols).\n";
-        }
+        if (!isNameValid(newUser.nameandsur))
+            cout << "Invalid input. Please use letters only.\n";
     } while (!isNameValid(newUser.nameandsur));
 
     int back;
     bool isDuplicate;
-
     do {
         cout << "Enter your phone number (10 digits): ";
         getline(cin, newUser.phone);
 
         if (!isPhoneValid(newUser.phone)) {
-            cout << "Invalid phone number. Please enter a valid 10-digit phone number.\n";
+            cout << "Invalid phone number.\n";
             do {
                 cout << "Enter your choice (1 to continue, 2 to exit): ";
-                cin >> back;
-                cin.ignore();
-                if (back == 2) {
-                    clearScreen();
-                    return;
-                }
+                cin >> back; cin.ignore();
+                if (back == 2) return;
             } while (back != 1);
             continue;
         }
@@ -156,57 +138,40 @@ void registerUser(User& currentUser) {
             string existingPhone = line.substr(pos1 + 1, pos2 - pos1 - 1);
             if (existingPhone == newUser.phone) {
                 isDuplicate = true;
-                cout << "This phone number is already registered.\n";
+                cout << "Phone already registered.\n";
                 do {
                     cout << "Enter your choice (1 to continue, 2 to exit): ";
-                    cin >> back;
-                    cin.ignore();
-                    if (back == 2) {
-                        clearScreen();
-                        return;
-                    }
+                    cin >> back; cin.ignore();
+                    if (back == 2) return;
                 } while (back != 1);
                 break;
             }
         }
-    } while (isDuplicate || !isPhoneValid(newUser.phone));
+    } while (isDuplicate);
 
     string confirmPass;
     do {
         cout << "Enter your password: ";
         getMaskedPassword(newUser.password, 20);
-
-        if (newUser.password.length() < 8) {
-            cout << "Password needs to be at least 8 characters.\n";
-        } else if (newUser.password.length() > 20) {
-            cout << "Password needs to be less than 20 characters.\n";
-        } else if (newUser.password.find(' ') != string::npos) {
-            cout << "Password cannot contain spaces!\n";
-        } else {
-            break;
-        }
-    } while (true);
+    } while (newUser.password.length() < 8 || newUser.password.find(' ') != string::npos);
 
     do {
         cout << "Confirm your password: ";
         getMaskedPassword(confirmPass, 20);
-        if (confirmPass != newUser.password) {
+        if (confirmPass != newUser.password)
             cout << "Passwords do not match!\n";
-        }
     } while (confirmPass != newUser.password);
 
     file << newUser.nameandsur << "|" << newUser.phone << "|" << newUser.password << endl;
-    ofstream courseFile(newUser.phone + ".txt");
-    courseFile.close();
-
-    cout << "\nRegistration successful! Your username (phone) is " << newUser.phone << endl;
+    ofstream courseFile(newUser.phone + ".txt"); courseFile.close();
+    cout << "\nRegistration successful!\n";
     waitForEnter();
 }
 
-bool loginUser(User& currentUser) {
+bool LoginSystem::loginUser(User& currentUser) {
     ifstream file("user.txt");
     if (!file) {
-        cout << "Cannot open the file.\n";
+        cout << "Cannot open user database.\n";
         return false;
     }
 
@@ -215,14 +180,12 @@ bool loginUser(User& currentUser) {
     while (getline(file, line)) {
         size_t pos1 = line.find('|');
         size_t pos2 = line.find('|', pos1 + 1);
-
         if (pos1 == string::npos || pos2 == string::npos) continue;
 
         User temp;
         temp.nameandsur = line.substr(0, pos1);
         temp.phone = line.substr(pos1 + 1, pos2 - pos1 - 1);
         temp.password = line.substr(pos2 + 1);
-
         users.push_back(temp);
     }
 
@@ -240,6 +203,7 @@ bool loginUser(User& currentUser) {
             return true;
         }
     }
+
     cout << "Phone number or password incorrect.\n";
     return false;
 }

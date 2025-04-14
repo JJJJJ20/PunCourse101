@@ -60,8 +60,6 @@ void Progress::update_progress(const string& filename, int ID) {
             cout << "Updated: " << name << " -> Completed: " << total - remaining
                  << "/" << total << " (" << remaining << " hours left)\n";
         }
-
-        // Write (whether updated or not)
         fout << id << "," << name << "," << total << "," << remaining << ","
              << d << "," << m << "," << y << endl;
     }

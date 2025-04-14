@@ -43,7 +43,7 @@ void Course::add_course(CourseNode* head){
     cin.ignore();  
 
     cout << "Enter course name: ";
-    getline(cin, name);  // Get full name (including spaces)
+    getline(cin, name);
 
     cout << "Enter course hours: ";
     while (!(cin >> hours)) {
@@ -76,27 +76,24 @@ void Course::save_to_file(const string& filename) const {
 
 void Course::display(CourseNode* head) {
     if (!head) {
-        cout << "\n Course file not found\n";
+        cout << "\nCourse file not found\n";
         return;
     }
 
-    CourseNode* current = head;
-    bool hasCourse = false;
+    CourseNode* clone = clone_course_list(head);
+    CourseNode* sorted = sort_course_list_by_id(clone);  // ✅ เรียกใช้ฟังก์ชันใหม่
 
+    CourseNode* current = sorted;
     while (current) {
-        hasCourse = true;
-
-        int id = current->course->getID();
-        string name = current->course->getName();
-        float remaining = current->course->getRemaining();   
-        float total = current->course->getHours(); 
-        EXP exp = current->course->exp;
-
+        Course* c = current->course;
+        float total = c->getHours();
+        float remaining = c->getRemaining();
         float completed = total - remaining;
+        EXP exp = c->exp;
 
         cout << "----------------------------" << endl
-             << "ID            : " << id << endl
-             << "Name          : " << name << endl
+             << "ID            : " << c->getID() << endl
+             << "Name          : " << c->getName() << endl
              << "Total Hours   : " << total << endl
              << "Completed     : " << completed << endl
              << "Hours Left    : " << remaining << endl
@@ -106,11 +103,8 @@ void Course::display(CourseNode* head) {
         current = current->next;
     }
 
-    if (!hasCourse) {
-        cout << "\n Course Empty! \n";
-    }
+    delete_course_list(sorted);
 }
-
 
 void Course::delete_course(const string& filename, int targetID) {
     ifstream fin(filename);
@@ -127,7 +121,7 @@ void Course::delete_course(const string& filename, int targetID) {
     }
 
     string line;
-    //bool found = false;
+    bool found = false;
 
     while (getline(fin, line)) {
         stringstream ss(line);
@@ -143,6 +137,12 @@ void Course::delete_course(const string& filename, int targetID) {
     fin.close();
     fout.close();
 
+    if (!found) {
+        cout << "Course ID " << targetID << " not found.\n\n";
+        remove("temp.txt");
+        return;
+    }
+
     remove(filename.c_str());
     rename("temp.txt", filename.c_str());
 
@@ -150,3 +150,66 @@ void Course::delete_course(const string& filename, int targetID) {
 
 }
 
+void Course::edit_course(const string& filename, int targetID) {
+    ifstream fin(filename);
+    ofstream fout("temp.txt");
+    if (!fin || !fout) {
+        cout << "Error opening file.\n";
+        return;
+    }
+
+    string line;
+    bool found = false;
+
+    while (getline(fin, line)) {
+        stringstream ss(line);
+        int id, d, m, y;
+        float total, remaining;
+        string name, token;
+
+        getline(ss, token, ','); id = stoi(token);
+        getline(ss, name, ',');
+        getline(ss, token, ','); total = stof(token);
+        getline(ss, token, ','); remaining = stof(token);
+        getline(ss, token, ','); d = stoi(token);
+        getline(ss, token, ','); m = stoi(token);
+        getline(ss, token, ','); y = stoi(token);
+
+        if (id == targetID) {
+            found = true;
+            cout << "Editing course: " << name << endl;
+
+            cout << "Enter new course name: ";
+            cin.ignore();
+            getline(cin, name);
+
+            cout << "Enter new total hours: ";
+            while (!(cin >> total)) {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "Invalid input. Enter a number: ";
+            }
+
+            cout << "Enter expiration date (D M Y): ";
+            while (!(cin >> d >> m >> y)) {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "Invalid input. Enter date (D M Y): ";
+            }
+            remaining = total;
+        }
+
+        fout << id << "," << name << "," << total << "," << remaining << ","
+             << d << "," << m << "," << y << endl;
+    }
+
+    fin.close();
+    fout.close();
+
+    remove(filename.c_str());
+    rename("temp.txt", filename.c_str());
+
+    if (!found) {
+        cout << "Course ID not found.\n";
+    }
+}
