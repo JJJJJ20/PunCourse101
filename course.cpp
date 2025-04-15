@@ -141,6 +141,8 @@ void Course::delete_course(const string& filename, int targetID) {
         cout << "Course ID " << targetID << " not found.\n\n";
         remove("temp.txt");
         return;
+    } else {
+        found = true;
     }
 
     remove(filename.c_str());
