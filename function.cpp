@@ -77,7 +77,7 @@ void menu(const User& currentUser){
     Progress P;
     string filename = currentUser.phone;
     int choice,inputID_progress,inputID_delete;
-    CourseNode* head;
+    CourseNode* head = nullptr;
 
     while(1){
     cout<<"Choose a number"<<endl
@@ -91,12 +91,12 @@ void menu(const User& currentUser){
     cin>>choice;
     
         if (choice == 1) {
-            delete_course_list(head);
+            if (head) delete_course_list(head);
             head = load_courses_into_list(filename + ".txt");
             A.display(head);
             cout << "----------------------------" << endl;
         } else if (choice == 2) {
-            delete_course_list(head); 
+            if (head) delete_course_list(head);
             head = load_courses_into_list(filename + ".txt");
             if (!head) {
                 cout << "\nNo courses found\n\n";
@@ -110,6 +110,8 @@ void menu(const User& currentUser){
             A.save_to_file(currentUser.phone + ".txt"); 
             cout << "\n----------------------------" << endl;
         }else if (choice == 4) {
+            if (head) delete_course_list(head);
+            head = load_courses_into_list(filename + ".txt"); 
             if (!head) {
                 cout << "\nNo courses found\n\n";
                 continue;
@@ -118,7 +120,7 @@ void menu(const User& currentUser){
             A.delete_course(currentUser.phone + ".txt", inputID_progress);
 
         }else if (choice == 5) {
-            delete_course_list(head);
+            if (head) delete_course_list(head);
             head = load_courses_into_list(filename + ".txt");
             if (!head) {
                 cout << "\nNo courses found\n\n";

@@ -14,8 +14,33 @@ Course::Course(int id, string n, float hrs,float rem, EXP ex){
     exp = ex; 
 }
 
+void Course::display_info() const {
+    float completed = hours - remaining;
+    float percent = (hours > 0) ? (completed / hours) * 100 : 0;
+
+    cout << "----------------------------" << endl;
+    cout << "Type          : " << getType() << endl;
+    cout << "ID            : " << course_id << endl;
+    cout << "Name          : " << name << endl;
+    cout << "Total Hours   : " << fixed << setprecision(2) << hours << endl;
+    cout << "Completed     : " << fixed << setprecision(2) << completed 
+         << " (" << fixed << setprecision(2) << percent << "%)" << endl;
+    cout << "Hours Left    : " << fixed << setprecision(2) << remaining << endl;
+    cout << "Expiration    : " << setfill('0') << setw(2) << exp.d << "/"
+         << setw(2) << exp.m << "/" << exp.y << endl;
+}
+
+void BasicCourse::display_info() const {
+    Course::display_info();
+}
+
+void AdvancedCourse::display_info() const {
+    Course::display_info();
+}
+
+
 void Course::add_course(CourseNode* head){
-    int inputID;
+    //int inputID;
     bool existedID = false;
 
     do{
@@ -59,6 +84,7 @@ void Course::add_course(CourseNode* head){
         cout << "Invalid date. Enter expiration date (D M Y): ";
     }
 
+    remaining = hours;
 }
 
 void Course::save_to_file(const string& filename) const {
@@ -81,30 +107,17 @@ void Course::display(CourseNode* head) {
     }
 
     CourseNode* clone = clone_course_list(head);
-    CourseNode* sorted = sort_course_list_by_id(clone);  // ✅ เรียกใช้ฟังก์ชันใหม่
-
+    CourseNode* sorted = sort_course_list_by_id(clone);
     CourseNode* current = sorted;
+
     while (current) {
-        Course* c = current->course;
-        float total = c->getHours();
-        float remaining = c->getRemaining();
-        float completed = total - remaining;
-        EXP exp = c->exp;
-
-        cout << "----------------------------" << endl
-             << "ID            : " << c->getID() << endl
-             << "Name          : " << c->getName() << endl
-             << "Total Hours   : " << total << endl
-             << "Completed     : " << completed << endl
-             << "Hours Left    : " << remaining << endl
-             << "Expiration    : " << setfill('0') << setw(2) << exp.d << "/"
-                                << setw(2) << exp.m << "/" << exp.y << endl;
-
+        current->course->display_info();
         current = current->next;
     }
 
     delete_course_list(sorted);
 }
+
 
 void Course::delete_course(const string& filename, int targetID) {
     ifstream fin(filename);
@@ -132,6 +145,9 @@ void Course::delete_course(const string& filename, int targetID) {
         if (id != targetID) {
             fout << line << endl;
         }
+        else {
+            found = true;
+        }
     }
 
     fin.close();
@@ -141,8 +157,6 @@ void Course::delete_course(const string& filename, int targetID) {
         cout << "Course ID " << targetID << " not found.\n\n";
         remove("temp.txt");
         return;
-    } else {
-        found = true;
     }
 
     remove(filename.c_str());
