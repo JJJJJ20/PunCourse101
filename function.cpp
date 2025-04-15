@@ -9,21 +9,26 @@ bool login() {
     User currentUser;
     LoginSystem auth;  // ✅ เพิ่มบรรทัดนี้
 
-    cout << "Welcome!\n";
+    system("clear");
     
     int choice;
     do {
-        cout << "==== Main Menu ====\n"
-             << "1. Login\n"
-             << "2. Register\n"
-             << "3. Exit\n"
-             << "Enter choice: ";
+        cout << "╔════════════════════════════════════╗\n";
+        cout << "║     🎓 Welcome to Puncourse101     ║\n";
+        cout << "╠════════════════════════════════════╣\n";
+        cout << "║ 1. 🔐 Login                        ║\n";
+        cout << "║ 2. 📝 Register                     ║\n";
+        cout << "║ 3. 🚪 Exit                         ║\n";
+        cout << "╚════════════════════════════════════╝\n";
+        cout << "👉 Enter choice: ";
         cin >> choice;
         cin.ignore(); 
 
         if (choice == 1) {
             bool success = false;
             do {
+                system("clear");
+                cout << "🔓 Logging in...\n";
                 success = auth.loginUser(currentUser);  // ✅ เปลี่ยนตรงนี้
                 if (!success) {
                     string retry;
@@ -40,12 +45,15 @@ bool login() {
                 return true;
             }
         } else if (choice == 2) {
+            system("clear");
+            cout << "✍️ Registering new user...\n";
             auth.registerUser(currentUser);  // ✅ และตรงนี้
         } else if (choice == 3) {
-            cout << "ByeBye jubjub!\n";
+            system("clear");
+            cout << "👋ByeBye jubjub!\n";
             return false;    
         } else {
-            cout << "Invalid choice. Try again.\n";
+            system("clear");
         }
     } while (true);
 }
@@ -76,25 +84,35 @@ void menu(const User& currentUser){
     Course A;
     Progress P;
     string filename = currentUser.phone;
+    string name = currentUser.nameandsur;
     int choice,inputID_progress,inputID_delete;
     CourseNode* head = nullptr;
 
+    string short_name = name.substr(0, min((size_t)18, name.size()));
+
     while(1){
-    cout<<"Choose a number"<<endl
-        <<"1. View course"<<endl
-        <<"2. Update course progress"<<endl
-        <<"3. Add course"<<endl
-        <<"4. Delete course"<<endl
-        <<"5. Edit course"<<endl
-        <<"6. Exit"<<endl
-        <<"Enter your number: ";
-    cin>>choice;
-    
+        system("clear");
+        cout << "╔════════════════════════════════════════════╗\n";
+        cout << "║ 🎉 Login Successful! Welcome " << short_name;
+        for (int i = short_name.length(); i < 14; ++i) cout << " ";
+        cout << "║\n"
+        << "╠════════════════════════════════════════════╣\n"
+        << "║ 1. 📚 View all courses                     ║\n"
+        << "║ 2. ⏱️  Update course progress               ║\n"
+        << "║ 3. ➕ Add new course                       ║\n"
+        << "║ 4. ❌ Delete a course                      ║\n"
+        << "║ 5. ✏️  Edit course details                  ║\n"
+        << "║ 6. 🚪 Exit to main menu                    ║\n"
+        << "╚════════════════════════════════════════════╝\n"
+        << "👉 Enter your number: ";
+        cin>>choice;
+        cin.ignore();
+
+        system("clear");
         if (choice == 1) {
             if (head) delete_course_list(head);
             head = load_courses_into_list(filename + ".txt");
             A.display(head);
-            cout << "----------------------------" << endl;
         } else if (choice == 2) {
             if (head) delete_course_list(head);
             head = load_courses_into_list(filename + ".txt");

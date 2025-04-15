@@ -198,7 +198,7 @@ bool LoginSystem::loginUser(User& currentUser) {
     for (const auto& user : users) {
         if (user.phone == phone && user.password == password) {
             currentUser = user;
-            cout << "\nLogin Successful! Welcome " << user.nameandsur << endl;
+            //cout << "\nLogin Successful! Welcome " << user.nameandsur << endl;
             saveLogin(currentUser);
             return true;
         }
