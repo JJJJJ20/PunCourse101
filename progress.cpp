@@ -63,7 +63,7 @@ void Progress::update_progress(const string& filename, int ID) {
         fout << id << "," << name << "," << total << "," << remaining << ","
              << d << "," << m << "," << y << endl;
     }
-
+    
     fin.close();
     fout.close();
 

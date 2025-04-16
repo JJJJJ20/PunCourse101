@@ -39,6 +39,7 @@ public:
     static void load_from_file(const string& filename = "course.txt");
     static void delete_course(const string& filename, int targetID);
     static void edit_course(const string& filename, int targetID);
+    void show_course_list(CourseNode* head);
 };
 
 class BasicCourse : public Course {

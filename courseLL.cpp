@@ -58,9 +58,14 @@ CourseNode* sort_course_list_by_id(CourseNode* head) {
     CourseNode* sorted = nullptr;
 
     while (head) {
-        CourseNode* current = head;
-        head = head->next;
-        current->next = nullptr;
+        Course* courseCopy = create_course_from_data(
+            head->course->getID(),
+            head->course->getName(),
+            head->course->getHours(),
+            head->course->getRemaining(),
+            head->course->getExpiration()
+        );
+        CourseNode* current = new CourseNode(courseCopy);
 
         if (!sorted || current->course->getID() < sorted->course->getID()) {
             current->next = sorted;
@@ -73,6 +78,7 @@ CourseNode* sort_course_list_by_id(CourseNode* head) {
             current->next = temp->next;
             temp->next = current;
         }
+        head = head->next;
     }
 
     return sorted;

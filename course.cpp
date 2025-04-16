@@ -4,6 +4,7 @@
 #include <iomanip>
 #include "course.h"
 #include "courseLL.h"  
+#include "login.h"
 
 
 Course::Course(int id, string n, float hrs,float rem, EXP ex){
@@ -14,21 +15,31 @@ Course::Course(int id, string n, float hrs,float rem, EXP ex){
     exp = ex; 
 }
 
+
 void Course::display_info() const {
     float completed = hours - remaining;
     float percent = (hours > 0) ? (completed / hours) * 100 : 0;
 
-    cout << "----------------------------" << endl;
-    cout << "Type          : " << getType() << endl;
-    cout << "ID            : " << course_id << endl;
-    cout << "Name          : " << name << endl;
-    cout << "Total Hours   : " << fixed << setprecision(2) << hours << endl;
-    cout << "Completed     : " << fixed << setprecision(2) << completed 
-         << " (" << fixed << setprecision(2) << percent << "%)" << endl;
-    cout << "Hours Left    : " << fixed << setprecision(2) << remaining << endl;
-    cout << "Expiration    : " << setfill('0') << setw(2) << exp.d << "/"
-         << setw(2) << exp.m << "/" << exp.y << endl;
+    // Progress bar with █ and ░
+    int barWidth = 20;
+    int filled = static_cast<int>((percent / 100.0) * barWidth);
+    string progressBar = "[" + string(filled, '#') + string(barWidth - filled, '-') + "]";
+
+    cout << "═════════════════════════════════════════════"<<endl
+    << "🆔 Course ID   : " << course_id << endl
+    << "📚 Name        : " << name << endl
+    << fixed << setprecision(2)
+    << "📘 Course Type : " << getType() << endl
+    << "🕒 Total Hours : " << hours << endl
+    << "✅ Completed   : " << completed << " (" << percent << "%)"<<endl
+    << "📊 Progress    : " << progressBar << endl
+    << "⏳ Hours Left  : " << remaining << endl
+    << "📅 Expiration  : "
+         << setfill('0') << setw(2) << exp.d << "/"
+         << setw(2) << exp.m << "/" << exp.y << endl
+    << "═════════════════════════════════════════════\n\n";
 }
+
 
 void BasicCourse::display_info() const {
     Course::display_info();
@@ -101,21 +112,24 @@ void Course::save_to_file(const string& filename) const {
 
 
 void Course::display(CourseNode* head) {
+    extern LoginSystem auth;
     if (!head) {
         cout << "\nCourse file not found\n";
+        auth.waitForEnter();
         return;
     }
 
-    CourseNode* clone = clone_course_list(head);
-    CourseNode* sorted = sort_course_list_by_id(clone);
+    CourseNode* sorted = sort_course_list_by_id(head);
+    //CourseNode* sorted = sort_course_list_by_id(clone);
     CourseNode* current = sorted;
 
     while (current) {
         current->course->display_info();
         current = current->next;
     }
-
+    
     delete_course_list(sorted);
+    auth.waitForEnter();
 }
 
 
@@ -228,4 +242,39 @@ void Course::edit_course(const string& filename, int targetID) {
     if (!found) {
         cout << "Course ID not found.\n";
     }
+}
+
+void Course::show_course_list(CourseNode* head) {
+    if (!head) {
+        cout << "No courses available.\n";
+        return;
+    }
+    CourseNode* sorted = sort_course_list_by_id(clone_course_list(head));
+    CourseNode* current = sorted;
+
+    cout << "📚 Available Courses:\n";
+    cout << "═══════════════════════════════════════════════════════\n";
+    cout << "🆔 ID              📘 Course Name\n";
+    cout << "───────────────────────────────────────────────────────\n";
+
+    while (current) {
+        int id = current->course->getID();
+        string name = current->course->getName();
+
+        if (name.length() > 30) name = name.substr(0, 27) + "...";
+
+        stringstream row;
+        row << id;
+        int spaceID = 19 - to_string(id).length();
+        row << string(spaceID, ' ') << " ";
+
+        row << name;
+
+        cout << row.str() << endl;
+        current = current->next;
+    }
+
+    cout << "═══════════════════════════════════════════════════════\n";
+
+    delete_course_list(sorted);
 }

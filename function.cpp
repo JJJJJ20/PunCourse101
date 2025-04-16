@@ -4,10 +4,10 @@ using namespace std;
 #include "function.h"
 #include "login.h"
 
+LoginSystem auth;
 
 bool login() {
     User currentUser;
-    LoginSystem auth;  // ✅ เพิ่มบรรทัดนี้
 
     system("clear");
     
@@ -35,6 +35,7 @@ bool login() {
                     cout << "Do you want to try again? (y/n): ";
                     getline(cin, retry);
                     if (retry != "y" && retry != "Y") {
+                        system("clear");
                         break;
                     }
                 }
@@ -60,22 +61,11 @@ bool login() {
 
 
 int choose_course(CourseNode* head) {
-
-    CourseNode* cloned = clone_course_list(head);
-    CourseNode* sorted = sort_course_list_by_id(cloned);
-
-    cout << "\n All Courses:\n";
-
-    CourseNode* current = sorted;
-    while (current) {
-        cout << current->course-> getID() << "  " << current->course->getName() << endl;
-        current = current->next;
-    }
-
+    Course temp;
+    temp.show_course_list(head);
     int inputID;
-    cout << "\nEnter the course ID: ";
+    cout << "🔎 Enter the course ID to select: ";
     cin >> inputID;
-
     return inputID;
 }
 
@@ -83,12 +73,13 @@ int choose_course(CourseNode* head) {
 void menu(const User& currentUser){
     Course A;
     Progress P;
+    LoginSystem sys;
     string filename = currentUser.phone;
     string name = currentUser.nameandsur;
     int choice,inputID_progress,inputID_delete;
     CourseNode* head = nullptr;
 
-    string short_name = name.substr(0, min((size_t)18, name.size()));
+    string short_name = name.substr(0, min((size_t)14, name.size()));
 
     while(1){
         system("clear");
@@ -112,7 +103,9 @@ void menu(const User& currentUser){
         if (choice == 1) {
             if (head) delete_course_list(head);
             head = load_courses_into_list(filename + ".txt");
-            A.display(head);
+            CourseNode* clone = clone_course_list(head);
+            A.display(clone);
+            delete_course_list(clone); 
         } else if (choice == 2) {
             if (head) delete_course_list(head);
             head = load_courses_into_list(filename + ".txt");
@@ -154,6 +147,6 @@ void menu(const User& currentUser){
             cout << "Invalid choice. Try again.\n";
         }
     }
-
+ 
 
 }
