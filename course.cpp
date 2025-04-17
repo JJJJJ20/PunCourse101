@@ -57,7 +57,6 @@ void Course::add_course(CourseNode* head){
     do{
         existedID = false;
         cout << "Enter course ID: ";
-        cout << "Enter course ID: ";
     while (true) {
         cin >> course_id;
 
@@ -98,12 +97,24 @@ void Course::add_course(CourseNode* head){
         cout << "Invalid input. Please enter a number for hours: ";
     }
 
-    cout << "Enter expiration date (D M Y): ";
-    while (!(cin >> exp.d >> exp.m >> exp.y)) {
-        cin.clear();
-        cin.ignore(10000, '\n');
-        cout << "Invalid date. Enter expiration date (D M Y): ";
-    }
+
+    while(true) {
+        cout << "Enter expiration date (D M Y): ";
+        cin >> exp.d >> exp.m >> exp.y;
+
+        if (cin.fail()) {
+            cin.clear(); 
+            cin.ignore(10000, '\n'); 
+             cout << "Invalid input. Please enter only numbers\n";
+         } else if (exp.d < 0 || exp.d > 31) {
+                cout << "Invalid date. Day must be between 1 and 31\n"; }  
+            else if (exp.m < 0 || exp.m > 12) {
+                cout << "Invalid month. Month must be between 1 and 12\n"; }  
+            else if (exp.y < 2000 || exp.y > 2570) {
+                cout << "Invalid year. Year must be between 2000 and 2570\n"; }  
+            else break; 
+        
+    };
 
     remaining = hours;
 }
