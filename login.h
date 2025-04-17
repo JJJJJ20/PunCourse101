@@ -32,7 +32,7 @@ public:
     void clearScreen();
     void waitForEnter();
 
-    void saveLogin(const User& currentUser);
+    //void saveLogin(const User& currentUser);
     bool loadLogin(User& currentUser);
     void logoutUser(User& currentUser);
 

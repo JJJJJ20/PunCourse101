@@ -57,11 +57,21 @@ void Course::add_course(CourseNode* head){
     do{
         existedID = false;
         cout << "Enter course ID: ";
-        while (!(cin >> course_id)) {
-            cin.clear(); // clear error flags
-            cin.ignore(10000, '\n'); // discard invalid input
-            cout << "Invalid input. Please enter a number for course ID: ";
+        cout << "Enter course ID: ";
+    while (true) {
+        cin >> course_id;
+
+     if (cin.fail()) {
+            cin.clear(); 
+            cin.ignore(10000, '\n'); 
+             cout << "Invalid input. Please enter only numbers for course ID: ";
+         } else if (course_id < 0) {
+             cout << "Invalid input. Please enter counting number only for course ID: ";
+         } else {
+            break; 
         }
+    }
+        
 
         CourseNode* current=head;
         while (current) {

@@ -69,11 +69,12 @@ void LoginSystem::waitForEnter() {
     }
 }
 
+/*
 void LoginSystem::saveLogin(const User& currentUser) {
     ofstream file("logindata.txt");
     if (file)
         file << currentUser.nameandsur << "|" << currentUser.phone << "|" << currentUser.password << endl;
-}
+} */
 
 bool LoginSystem::loadLogin(User& currentUser) {
     ifstream file("logindata.txt");
@@ -153,6 +154,7 @@ void LoginSystem::registerUser(User& currentUser) {
     do {
         cout << "Enter your password: ";
         getMaskedPassword(newUser.password, 20);
+        if(newUser.password.length() < 8 ) cout<<"Your password must be at least 8 characters\n";
     } while (newUser.password.length() < 8 || newUser.password.find(' ') != string::npos);
 
     do {
@@ -199,7 +201,7 @@ bool LoginSystem::loginUser(User& currentUser) {
         if (user.phone == phone && user.password == password) {
             currentUser = user;
             //cout << "\nLogin Successful! Welcome " << user.nameandsur << endl;
-            saveLogin(currentUser);
+            //saveLogin(currentUser);
             return true;
         }
     }
