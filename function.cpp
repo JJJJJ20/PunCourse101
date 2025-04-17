@@ -48,7 +48,7 @@ bool login() {
         } else if (choice == 2) {
             system("clear");
             cout << "✍️ Registering new user...\n";
-            auth.registerUser(currentUser);  // ✅ และตรงนี้
+            auth.registerUser(currentUser);  //  และตรงนี้
         } else if (choice == 3) {
             system("clear");
             cout << "👋ByeBye jubjub!\n";
@@ -80,6 +80,7 @@ void menu(const User& currentUser){
     CourseNode* head = nullptr;
 
     string short_name = name.substr(0, min((size_t)14, name.size()));
+    //system("clear");
 
     while(1){
         system("clear");
@@ -115,7 +116,7 @@ void menu(const User& currentUser){
             }
             inputID_progress = choose_course(head);
             P.update_progress(filename + ".txt", inputID_progress);
-        
+            //sys.waitForEnter();
         } else if(choice==3){
             A.add_course(head);
             A.save_to_file(currentUser.phone + ".txt"); 

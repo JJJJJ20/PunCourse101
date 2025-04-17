@@ -1,6 +1,8 @@
 #include "progress.h"
+#include "login.h"
 #include <fstream>
 #include <sstream>
+LoginSystem sys;
 
 Progress::Progress(Course* c, float comp) : course(c), completed_hours(comp) {
     if (course)
@@ -21,6 +23,7 @@ void Progress::print() {
 
 
 void Progress::update_progress(const string& filename, int ID) {
+    //extern LoginSystem sys;
     ifstream fin(filename);
     ofstream fout("temp.txt");
     if (!fin || !fout) {
@@ -36,6 +39,7 @@ void Progress::update_progress(const string& filename, int ID) {
         int id, d, m, y;
         float total, remaining;
         string name, token;
+        //LoginSystem sys;
 
         getline(ss, token, ','); id = stoi(token);
         getline(ss, name, ',');
@@ -50,15 +54,19 @@ void Progress::update_progress(const string& filename, int ID) {
             float done;
             cout << "Enter hours completed: ";
             cin >> done;
+            cin.ignore();
 
             if (done > remaining) {
-                cout << "You cannot complete more than remaining hours. Adjusted to maximum.\n";
+                cout << "You cannot complete more than remaining hours. Adjusted to maximum."<<endl;
+                sys.waitForEnter();
                 done = remaining;
+                remaining -= done;
+            } else{
+                remaining -= done;
+                  cout << "Updated: " << name << " -> Completed: " << total - remaining
+                   << "/" << total << " (" << remaining << " hours left)\n";
+                 sys.waitForEnter();
             }
-
-            remaining -= done;
-            cout << "Updated: " << name << " -> Completed: " << total - remaining
-                 << "/" << total << " (" << remaining << " hours left)\n";
         }
         fout << id << "," << name << "," << total << "," << remaining << ","
              << d << "," << m << "," << y << endl;
@@ -72,6 +80,8 @@ void Progress::update_progress(const string& filename, int ID) {
 
     if (!found) {
         cout << "Course ID not found.\n";
+        cin.ignore();
+        sys.waitForEnter();
     }
 }
 

@@ -15,6 +15,7 @@ Course::Course(int id, string n, float hrs,float rem, EXP ex){
     exp = ex; 
 }
 
+extern LoginSystem auth;
 
 void Course::display_info() const {
     float completed = hours - remaining;
@@ -101,6 +102,7 @@ void Course::add_course(CourseNode* head){
     while(true) {
         cout << "Enter expiration date (D M Y): ";
         cin >> exp.d >> exp.m >> exp.y;
+        cin.ignore();
 
         if (cin.fail()) {
             cin.clear(); 
@@ -117,6 +119,8 @@ void Course::add_course(CourseNode* head){
     };
 
     remaining = hours;
+    cout << endl;
+    auth.waitForEnter();
 }
 
 void Course::save_to_file(const string& filename) const {
@@ -133,7 +137,6 @@ void Course::save_to_file(const string& filename) const {
 
 
 void Course::display(CourseNode* head) {
-    extern LoginSystem auth;
     if (!head) {
         cout << "\nCourse file not found\n";
         auth.waitForEnter();
@@ -157,14 +160,18 @@ void Course::display(CourseNode* head) {
 void Course::delete_course(const string& filename, int targetID) {
     ifstream fin(filename);
     if (!fin) {
-        cout << "Cannot open file.\n";
+        cout << "Cannot open file."<<endl;
+        cin.ignore();
+        auth.waitForEnter();
         return;
     }
 
     ofstream fout("temp.txt");
     if (!fout) {
-        cout << "Cannot create temp file.\n";
+        cout << "Cannot create temp file."<<endl;
         fin.close();
+        cin.ignore();
+        auth.waitForEnter();
         return;
     }
 
@@ -189,15 +196,19 @@ void Course::delete_course(const string& filename, int targetID) {
     fout.close();
 
     if (!found) {
-        cout << "Course ID " << targetID << " not found.\n\n";
+        cout << "Course ID " << targetID << " not found.\n"<<endl;
         remove("temp.txt");
+        cin.ignore();
+        auth.waitForEnter();
         return;
     }
 
     remove(filename.c_str());
     rename("temp.txt", filename.c_str());
 
-    cout << "Course ID " << targetID << " deleted successfully.\n\n";
+    cout << "Course ID " << targetID << " deleted successfully.\n"<<endl;
+    cin.ignore();
+    auth.waitForEnter();
 
 }
 
@@ -206,6 +217,7 @@ void Course::edit_course(const string& filename, int targetID) {
     ofstream fout("temp.txt");
     if (!fin || !fout) {
         cout << "Error opening file.\n";
+        auth.waitForEnter();
         return;
     }
 
@@ -241,17 +253,35 @@ void Course::edit_course(const string& filename, int targetID) {
                 cout << "Invalid input. Enter a number: ";
             }
 
-            cout << "Enter expiration date (D M Y): ";
-            while (!(cin >> d >> m >> y)) {
-                cin.clear();
-                cin.ignore(10000, '\n');
-                cout << "Invalid input. Enter date (D M Y): ";
-            }
+            while(true) {
+                cout << "Enter expiration date (D M Y): ";
+                cin >> d >> m >> y;
+                //cin.ignore(10000, '\n');
+        
+                if (cin.fail()) {
+                    cin.clear(); 
+                    cin.ignore(10000, '\n'); 
+                     cout << "Invalid input. Please enter only numbers"<<endl;
+                 } else if (d < 1 || d > 31) {
+                        cout << "Invalid date. Day must be between 1 and 31"<<endl; }  
+                    else if (m < 1 || m > 12) {
+                        cout << "Invalid month. Month must be between 1 and 12"<<endl; }  
+                    else if (y < 2000 || y > 2570) {
+                        cout << "Invalid year. Year must be between 2000 and 2570"<<endl; }  
+                    else {
+                        cin.ignore(10000, '\n');
+                        break;
+                    } 
+                
+            };
             remaining = total;
         }
 
         fout << id << "," << name << "," << total << "," << remaining << ","
              << d << "," << m << "," << y << endl;
+        cin.ignore(10000,'\n');
+        auth.waitForEnter();
+
     }
 
     fin.close();
@@ -261,7 +291,10 @@ void Course::edit_course(const string& filename, int targetID) {
     rename("temp.txt", filename.c_str());
 
     if (!found) {
-        cout << "Course ID not found.\n";
+        cout << "Course ID not found."<<endl;
+        cin.ignore(10000,'\n');
+        auth.waitForEnter();
+        return ;
     }
 }
 
