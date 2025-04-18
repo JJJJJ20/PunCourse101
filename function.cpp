@@ -1,5 +1,6 @@
 #include<iostream>
 #include <algorithm>
+#include <filesystem>
 using namespace std;
 #include "function.h"
 #include "login.h"
@@ -84,22 +85,37 @@ void menu(const User& currentUser){
 
     while(1){
         system("clear");
+        if (head) delete_course_list(head); 
+        head = load_courses_into_list(filename + ".txt");
+        bool hasCourse = (head != nullptr);
+
         cout << "╔════════════════════════════════════════════╗\n";
         cout << "║ 🎉 Login Successful! Welcome " << short_name;
         for (int i = short_name.length(); i < 14; ++i) cout << " ";
-        cout << "║\n"
-        << "╠════════════════════════════════════════════╣\n"
-        << "║ 1. 📚 View all courses                     ║\n"
-        << "║ 2. ⏱️  Update course progress               ║\n"
-        << "║ 3. ➕ Add new course                       ║\n"
-        << "║ 4. ❌ Delete a course                      ║\n"
-        << "║ 5. ✏️  Edit course details                  ║\n"
-        << "║ 6. 🚪 Exit to main menu                    ║\n"
-        << "╚════════════════════════════════════════════╝\n"
-        << "👉 Enter your number: ";
-        cin>>choice;
+        cout << "║\n";
+        cout << "╠════════════════════════════════════════════╣\n";
+
+        if (hasCourse) {
+            cout << "║ 1. 📚 View all courses                     ║\n";
+            cout << "║ 2. ⏱️  Update course progress               ║\n";
+            cout << "║ 3. ➕ Add new course                       ║\n";
+            cout << "║ 4. ❌ Delete a course                      ║\n";
+            cout << "║ 5. ✏️  Edit course details                  ║\n";
+        } else {
+            cout <<"║"<< "\033[90m 1. 📚 View all courses                     \033[0m"<<"║"<<endl;
+            cout << "║"<<"\033[90m 2. ⏱️  Update course progress               \033[0m"<<"║"<<endl;
+            cout << "║ 3. ➕ Add new course                       ║\n";
+            cout << "║"<<"\033[90m 4. ❌ Delete a course                      \033[0m"<<"║"<<endl;
+            cout << "║"<<"\033[90m 5. ✏️  Edit course details                  \033[0m"<<"║"<<endl;
+        }
+
+        cout << "║ 6. 🚪 Exit to main menu                    ║\n";
+        cout << "╚════════════════════════════════════════════╝\n";
+        cout << "👉 Enter your number: ";
+        cin >> choice;
 
         system("clear");
+
         if (choice == 1) {
             if (head) delete_course_list(head);
             head = load_courses_into_list(filename + ".txt");
@@ -110,7 +126,6 @@ void menu(const User& currentUser){
             if (head) delete_course_list(head);
             head = load_courses_into_list(filename + ".txt");
             if (!head) {
-                cout << "\nNo courses found\n\n";
                 continue;
             }
             inputID_progress = choose_course(head);
@@ -124,7 +139,6 @@ void menu(const User& currentUser){
             if (head) delete_course_list(head);
             head = load_courses_into_list(filename + ".txt"); 
             if (!head) {
-                cout << "\nNo courses found\n\n";
                 continue;
             }
             inputID_progress = choose_course(head);
@@ -134,7 +148,6 @@ void menu(const User& currentUser){
             if (head) delete_course_list(head);
             head = load_courses_into_list(filename + ".txt");
             if (!head) {
-                cout << "\nNo courses found\n\n";
                 continue;
             }
             inputID_progress = choose_course(head);

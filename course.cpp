@@ -57,20 +57,19 @@ void Course::add_course(CourseNode* head){
 
     do{
         existedID = false;
-        cout << "Enter course ID: ";
-    while (true) {
-        cin >> course_id;
+         while (true) {
+            cout << "Enter course ID: ";
+            cin >> course_id;
 
-     if (cin.fail()) {
-            cin.clear(); 
-            cin.ignore(10000, '\n'); 
-             cout << "Invalid input. Please enter only numbers for course ID: ";
-         } else if (course_id < 0) {
-             cout << "Invalid input. Please enter counting number only for course ID: ";
-         } else {
-            break; 
+            if (cin.fail()) {
+                cin.clear(); 
+                cin.ignore(10000, '\n'); 
+                cout << "Invalid input. Please enter only numbers for course ID" << endl;
+             } else if (course_id < 0) {
+                cout << "Invalid input. Please enter counting number only for course ID" << endl;
+             } 
+             else break;  
         }
-    }
         
 
         CourseNode* current=head;
@@ -91,11 +90,19 @@ void Course::add_course(CourseNode* head){
     cout << "Enter course name: ";
     getline(cin, name);
 
-    cout << "Enter course hours: ";
-    while (!(cin >> hours)) {
-        cin.clear();
-        cin.ignore(10000, '\n');
-        cout << "Invalid input. Please enter a number for hours: ";
+    while(true) {
+        cout << "Enter course hours: ";
+        cin >> hours;
+        if(cin.fail()) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Invalid input. Please enter a number for hours"<< endl;
+        } else if (hours < 0) {
+            cout << "Please enter positive numbers only." << endl;
+        } else {
+            cin.ignore(10000, '\n');
+            break;
+        }
     }
 
 
@@ -137,8 +144,6 @@ void Course::save_to_file(const string& filename) const {
 
 void Course::display(CourseNode* head) {
     if (!head) {
-        cout << "\nCourse file not found\n";
-        auth.waitForEnter();
         return;
     }
 

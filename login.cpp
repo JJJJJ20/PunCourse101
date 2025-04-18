@@ -45,6 +45,7 @@ void LoginSystem::getMaskedPassword(string& password, size_t maxLen) {
             cout << "*";
         }
     }
+    tcflush(STDIN_FILENO, TCIFLUSH);
 }
 
 void LoginSystem::clearScreen() {
@@ -124,11 +125,7 @@ void LoginSystem::registerUser(User& currentUser) {
 
         if (!isPhoneValid(newUser.phone)) {
             cout << "Invalid phone number.\n";
-            do {
-                cout << "Enter your choice (1 to continue, 2 to exit): ";
-                cin >> back; cin.ignore();
-                if (back == 2) return;
-            } while (back != 1);
+            waitForEnter();
             continue;
         }
 
@@ -142,11 +139,7 @@ void LoginSystem::registerUser(User& currentUser) {
             if (existingPhone == newUser.phone) {
                 isDuplicate = true;
                 cout << "Phone already registered.\n";
-                do {
-                    cout << "Enter your choice (1 to continue, 2 to exit): ";
-                    cin >> back; cin.ignore();
-                    if (back == 2) return;
-                } while (back != 1);
+                waitForEnter();
                 break;
             }
         }
@@ -168,8 +161,20 @@ void LoginSystem::registerUser(User& currentUser) {
 
     file << newUser.nameandsur << "|" << newUser.phone << "|" << newUser.password << endl;
     ofstream courseFile(newUser.phone + ".txt"); courseFile.close();
-    cout << "\nRegistration successful!\n";
-    waitForEnter();
+    cout << "\nRegistration successful!"<<endl;
+    cout << "Press Enter for next function ";
+tcflush(STDIN_FILENO, TCIFLUSH);
+
+while (true) {
+    char input = getchar();
+    if (input == '\n') {
+        clearScreen();
+        break;
+    } else {
+        while (getchar() != '\n');
+        cout << "❌ Invalid input. Please press Enter only.\n";
+    }
+}
 }
 
 bool LoginSystem::loginUser(User& currentUser) {
