@@ -54,7 +54,6 @@ void Progress::update_progress(const string& filename, int ID) {
             float done;
             cout << "Enter hours completed: ";
             cin >> done;
-            cin.ignore();
 
             if (done > remaining) {
                 cout << "You cannot complete more than remaining hours. Adjusted to maximum."<<endl;

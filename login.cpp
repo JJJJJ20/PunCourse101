@@ -56,18 +56,20 @@ void LoginSystem::clearScreen() {
 }
 
 void LoginSystem::waitForEnter() {
-    cout << "Press Enter for next function ";
-    while (true) {
-        char input = getchar();
-        if (input == '\n') {
-            clearScreen();
-            break;
-        } else {
-            cout << "Invalid input. Please press Enter only.\n";
-            while (getchar() != '\n');
+        cout << "Press Enter for next function ";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        while (true) {
+            char input = getchar();
+            if (input == '\n') {
+                clearScreen();
+                break;
+            } else {
+                cout << "Invalid input. Please press Enter only.\n";
+                while (getchar() != '\n');
+            }
         }
     }
-}
 
 /*
 void LoginSystem::saveLogin(const User& currentUser) {

@@ -98,7 +98,6 @@ void menu(const User& currentUser){
         << "╚════════════════════════════════════════════╝\n"
         << "👉 Enter your number: ";
         cin>>choice;
-        cin.ignore();
 
         system("clear");
         if (choice == 1) {
@@ -141,7 +140,7 @@ void menu(const User& currentUser){
             inputID_progress = choose_course(head);
             A.edit_course(currentUser.phone + ".txt", inputID_progress);
         }else if (choice == 6) {
-                cout << "ByeBye jubjub!\n";
+                cout << "👋ByeBye jubjub!\n";
             break;
         }
         else {

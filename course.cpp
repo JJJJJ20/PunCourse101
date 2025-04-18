@@ -102,15 +102,14 @@ void Course::add_course(CourseNode* head){
     while(true) {
         cout << "Enter expiration date (D M Y): ";
         cin >> exp.d >> exp.m >> exp.y;
-        cin.ignore();
 
         if (cin.fail()) {
             cin.clear(); 
             cin.ignore(10000, '\n'); 
              cout << "Invalid input. Please enter only numbers\n";
-         } else if (exp.d < 0 || exp.d > 31) {
+         } else if (exp.d < 1 || exp.d > 31) {
                 cout << "Invalid date. Day must be between 1 and 31\n"; }  
-            else if (exp.m < 0 || exp.m > 12) {
+            else if (exp.m < 1 || exp.m > 12) {
                 cout << "Invalid month. Month must be between 1 and 12\n"; }  
             else if (exp.y < 2000 || exp.y > 2570) {
                 cout << "Invalid year. Year must be between 2000 and 2570\n"; }  
@@ -161,7 +160,6 @@ void Course::delete_course(const string& filename, int targetID) {
     ifstream fin(filename);
     if (!fin) {
         cout << "Cannot open file."<<endl;
-        cin.ignore();
         auth.waitForEnter();
         return;
     }
@@ -170,7 +168,6 @@ void Course::delete_course(const string& filename, int targetID) {
     if (!fout) {
         cout << "Cannot create temp file."<<endl;
         fin.close();
-        cin.ignore();
         auth.waitForEnter();
         return;
     }
@@ -198,7 +195,6 @@ void Course::delete_course(const string& filename, int targetID) {
     if (!found) {
         cout << "Course ID " << targetID << " not found.\n"<<endl;
         remove("temp.txt");
-        cin.ignore();
         auth.waitForEnter();
         return;
     }
@@ -207,7 +203,6 @@ void Course::delete_course(const string& filename, int targetID) {
     rename("temp.txt", filename.c_str());
 
     cout << "Course ID " << targetID << " deleted successfully.\n"<<endl;
-    cin.ignore();
     auth.waitForEnter();
 
 }
@@ -269,18 +264,17 @@ void Course::edit_course(const string& filename, int targetID) {
                     else if (y < 2000 || y > 2570) {
                         cout << "Invalid year. Year must be between 2000 and 2570"<<endl; }  
                     else {
-                        cin.ignore(10000, '\n');
                         break;
                     } 
                 
             };
             remaining = total;
+            cout << "\n✅ Course updated successfully."<<endl;
+            auth.waitForEnter();
         }
 
         fout << id << "," << name << "," << total << "," << remaining << ","
              << d << "," << m << "," << y << endl;
-        cin.ignore(10000,'\n');
-        auth.waitForEnter();
 
     }
 
@@ -292,7 +286,6 @@ void Course::edit_course(const string& filename, int targetID) {
 
     if (!found) {
         cout << "Course ID not found."<<endl;
-        cin.ignore(10000,'\n');
         auth.waitForEnter();
         return ;
     }
