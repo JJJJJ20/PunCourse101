@@ -95,7 +95,6 @@ int choose_course(CourseNode* head) {
     int inputID;
     cout << "🔎 Enter the course ID to select: ";
     cin >> inputID;
-    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
     return inputID;
 }
 

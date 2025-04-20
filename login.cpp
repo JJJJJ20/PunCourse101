@@ -74,31 +74,6 @@ void LoginSystem::waitForEnter() {
     }
 }
 
-
-
-bool LoginSystem::loadLogin(User& currentUser) {
-    ifstream file("logindata.txt");
-    if (!file) return false;
-    file >> currentUser.nameandsur >> currentUser.phone;
-    return true;
-}
-
-void LoginSystem::logoutUser(User& currentUser) {
-    if (loadLogin(currentUser)) {
-        remove("logindata.txt");
-        cout << "You have been logged out.\n";
-    } else {
-        cout << "You are not logged in.\n";
-    }
-}
-
-void LoginSystem::saveUsers(const vector<User>& users) {
-    ofstream file("user.txt");
-    for (const auto& user : users) {
-        file << user.nameandsur << "|" << user.phone << "|" << user.password << endl;
-    }
-}
-
 void LoginSystem::registerUser(User& currentUser) {
     ofstream file("user.txt", ios::app);
     if (!file) {
@@ -230,8 +205,6 @@ bool LoginSystem::loginUser(User& currentUser) {
     for (const auto& user : users) {
         if (user.phone == phone && user.password == password) {
             currentUser = user;
-            //cout << "\nLogin Successful! Welcome " << user.nameandsur << endl;
-            //saveLogin(currentUser);
             return true;
         }
     }

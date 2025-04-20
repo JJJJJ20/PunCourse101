@@ -13,13 +13,8 @@ private:
     float completed_hours;
 protected:
     Course* course;
-public:
-    Progress(Course* c = nullptr, float comp = 0.0f);
-    ~Progress() {};
-                     
-    void update_progress(const string& filename, int ID);    
-    void print(); 
-    void decrease_course_hours(const string& filename, int id, float decrease);                                        
+public:       
+    void update_progress(const string& filename, int ID);                                    
 };
 
 #endif

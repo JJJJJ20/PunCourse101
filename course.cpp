@@ -51,7 +51,6 @@ void AdvancedCourse::display_info() const {
 
 
 void Course::add_course(CourseNode* head){
-    //int inputID;
     bool existedID = false;
 
     do{
@@ -258,7 +257,6 @@ void Course::edit_course(const string& filename, int targetID) {
             while(true) {
                 cout << "Enter expiration date (D M Y): ";
                 cin >> d >> m >> y;
-                //cin.ignore(10000, '\n');
         
                 if (cin.fail()) {
                     cin.clear(); 
@@ -307,28 +305,26 @@ void Course::show_course_list(CourseNode* head) {
     CourseNode* current = sorted;
 
     cout << "📚 Available Courses:\n";
-    cout << "═══════════════════════════════════════════════════════\n";
-    cout << "🆔 ID              📘 Course Name\n";
-    cout << "───────────────────────────────────────────────────────\n";
+    cout << "═════════════════════════════════════════════════════════════════\n";
+    cout << "🆔 ID              📘 Course Name              🕒 Remaining\n";
+    cout << "─────────────────────────────────────────────────────────────────\n";
 
     while (current) {
         int id = current->course->getID();
         string name = current->course->getName();
+        float remaining = current->course->getRemaining();
 
-        if (name.length() > 30) name = name.substr(0, 27) + "...";
+        if (name.length() > 22) name = name.substr(0, 20) + "...";
 
         stringstream row;
-        row << id;
-        int spaceID = 19 - to_string(id).length();
-        row << string(spaceID, ' ') << " ";
-
-        row << name;
+        row << setw(20) << left << id;
+        row << setw(26) << left << name;
+        row << setw(5) << right << fixed << setprecision(0) << remaining << " hours";
 
         cout << row.str() << endl;
         current = current->next;
     }
 
-    cout << "═══════════════════════════════════════════════════════\n";
-
+    cout << "═════════════════════════════════════════════════════════════════\n";
     delete_course_list(sorted);
 }

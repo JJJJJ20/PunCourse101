@@ -7,7 +7,7 @@ using namespace std;
 #include "courseLL.h"
 
 
-int main(int argc, char *argv[]){
+int main(){
     login();
     return 0;
 }
