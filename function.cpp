@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <regex>
 #include <filesystem>
+#include <chrono>
+#include <thread>
 using namespace std;
 #include "function.h"
 #include "login.h"
@@ -16,7 +18,6 @@ int getValidatedInt(int min, int max, const string& prompt, function<void()> sho
         cin >> input;
         cin.ignore();
 
-        // เช็คว่า input เป็นตัวเลขล้วน ไม่ใช่ float
         if (all_of(input.begin(), input.end(), ::isdigit)) {
             int value = stoi(input);
             if (value >= min && value <= max) {
@@ -80,7 +81,8 @@ bool login() {
             auth.registerUser(currentUser);  //  และตรงนี้
         } else if (choice == 3) {
             system("clear");
-            cout << "👋ByeBye jubjub!\n";
+            runBunny(20,100);
+            cout << "👋 ByeBye jubjub!\n";
             return false;    
         } else {
             system("clear");
@@ -178,8 +180,24 @@ void menu(const User& currentUser){
             int inputID_progress = choose_course(head);
             A.edit_course(currentUser.phone + ".txt", inputID_progress);
         } else if (choice == 6) {
-            cout << "👋ByeBye jubjub!\n";
+            runBunny(20,100);
+            cout << "👋 ByeBye jubjub!\n";
             break;
         }
+    }
+}
+
+void printBunny(int position) {
+    string space(position, ' ');
+    cout << space << " (\\_/)" << endl;
+    cout << space << " (0x0)" << endl;
+    cout << space << "o(u u)" << endl;
+}
+
+void runBunny(int steps, int delay_ms) {
+    for (int pos = 0; pos <= steps; ++pos) {
+        system("clear");
+        printBunny(pos);
+        this_thread::sleep_for(chrono::milliseconds(delay_ms));
     }
 }

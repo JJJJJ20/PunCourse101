@@ -95,7 +95,7 @@ void Course::add_course(CourseNode* head){
             cin.clear();
             cin.ignore(10000, '\n');
             cout << "Invalid input. Please enter a number for hours"<< endl;
-        } else if (hours < 1) {
+        } else if (hours <= 0) {
             cout << "Please enter positive numbers only." << endl;
         } else {
             cin.ignore(10000, '\n');
