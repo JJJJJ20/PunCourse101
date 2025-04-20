@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
 #include "course.h"
 #include "courseLL.h"  
 #include "login.h"
@@ -20,8 +21,6 @@ extern LoginSystem auth;
 void Course::display_info() const {
     float completed = hours - remaining;
     float percent = (hours > 0) ? (completed / hours) * 100 : 0;
-
-    // Progress bar with █ and ░
     int barWidth = 20;
     int filled = static_cast<int>((percent / 100.0) * barWidth);
     string progressBar = "[" + string(filled, '#') + string(barWidth - filled, '-') + "]";
@@ -97,7 +96,7 @@ void Course::add_course(CourseNode* head){
             cin.clear();
             cin.ignore(10000, '\n');
             cout << "Invalid input. Please enter a number for hours"<< endl;
-        } else if (hours < 0) {
+        } else if (hours < 1) {
             cout << "Please enter positive numbers only." << endl;
         } else {
             cin.ignore(10000, '\n');
@@ -118,8 +117,8 @@ void Course::add_course(CourseNode* head){
                 cout << "Invalid date. Day must be between 1 and 31\n"; }  
             else if (exp.m < 1 || exp.m > 12) {
                 cout << "Invalid month. Month must be between 1 and 12\n"; }  
-            else if (exp.y < 2000 || exp.y > 2570) {
-                cout << "Invalid year. Year must be between 2000 and 2570\n"; }  
+            else if (exp.y < 2025 || exp.y > 2570) {
+                cout << "Invalid year. Year must be between 2025 and 2570\n"; }  
             else break; 
         
     };
@@ -148,7 +147,6 @@ void Course::display(CourseNode* head) {
     }
 
     CourseNode* sorted = sort_course_list_by_id(head);
-    //CourseNode* sorted = sort_course_list_by_id(clone);
     CourseNode* current = sorted;
 
     while (current) {

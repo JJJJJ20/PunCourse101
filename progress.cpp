@@ -1,5 +1,6 @@
 #include "progress.h"
 #include "login.h"
+#include <algorithm>
 #include <fstream>
 #include <sstream>
 LoginSystem sys;
@@ -54,6 +55,7 @@ void Progress::update_progress(const string& filename, int ID) {
             float done;
             cout << "Enter hours completed: ";
             cin >> done;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
             if (done > remaining) {
                 cout << "You cannot complete more than remaining hours. Adjusted to maximum."<<endl;
