@@ -14,12 +14,12 @@ int getValidatedInt(int min, int max, const string& prompt, function<void()> sho
     while (true) {
         cout << prompt;
         cin >> input;
+        cin.ignore();
 
         // เช็คว่า input เป็นตัวเลขล้วน ไม่ใช่ float
         if (all_of(input.begin(), input.end(), ::isdigit)) {
             int value = stoi(input);
             if (value >= min && value <= max) {
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 return value;
             } else {
                 system("clear");
@@ -30,7 +30,6 @@ int getValidatedInt(int min, int max, const string& prompt, function<void()> sho
             system("clear");
             showMenu();
             cout << "❌ Invalid input. Please enter an integer number only.\n";
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
     }
 }
@@ -96,6 +95,7 @@ int choose_course(CourseNode* head) {
     int inputID;
     cout << "🔎 Enter the course ID to select: ";
     cin >> inputID;
+    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
     return inputID;
 }
 

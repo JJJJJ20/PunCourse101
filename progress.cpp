@@ -40,7 +40,6 @@ void Progress::update_progress(const string& filename, int ID) {
         int id, d, m, y;
         float total, remaining;
         string name, token;
-        //LoginSystem sys;
 
         getline(ss, token, ','); id = stoi(token);
         getline(ss, name, ',');
@@ -55,7 +54,6 @@ void Progress::update_progress(const string& filename, int ID) {
             float done;
             cout << "Enter hours completed: ";
             cin >> done;
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
             if (done > remaining) {
                 cout << "You cannot complete more than remaining hours. Adjusted to maximum."<<endl;
@@ -81,7 +79,6 @@ void Progress::update_progress(const string& filename, int ID) {
 
     if (!found) {
         cout << "Course ID not found.\n";
-        cin.ignore();
         sys.waitForEnter();
     }
 }

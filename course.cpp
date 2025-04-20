@@ -155,7 +155,11 @@ void Course::display(CourseNode* head) {
     }
     
     delete_course_list(sorted);
-    auth.waitForEnter();
+
+    string dummy;
+    cout << "Press Enter for next function ";
+    getline(cin, dummy);
+    system("clear");
 }
 
 
